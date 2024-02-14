@@ -1,7 +1,7 @@
 async function fetchUsingDataFromForm(){
-    const mssg8 = document.querySelector("#message8")
-    const input = document.querySelector("#input8")
-    const url = "https://janas-api-server.azurewebsites.net"
+    //const mssg8 = document.querySelector("#message8")
+    //const input = document.querySelector("#input8")
+    const url = "https://janas-api-server.azurewebsites.net/user"
     const data = {
         code: InputDeviceInfo.value
     }
@@ -29,4 +29,4 @@ else if (response.status == 400){
 }
 }
 
-document.querySelector("#button8").addEventListener("click", fetchUsingDataFromForm)
+document.addEventListener("click", fetchUsingDataFromForm)
