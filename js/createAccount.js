@@ -1,6 +1,5 @@
 async function fetchUsingDataFromForm(){
-    //const mssg8 = document.querySelector("#message8")
-    //const input = document.querySelector("#input8")
+    const h1 = document.querySelector("h1")
     const url = "https://janas-api-server.azurewebsites.net/user"
     const data = {
         code: InputDeviceInfo.value
@@ -16,17 +15,17 @@ const options = {
 
 let response = await fetch(url, options)
 
-if (response.status == 200){
+if (response.status == 201){
     const obj = await response.json()
-    mssg8.innerHTML = obj.message
-}
-else if (response.status == 401){
-    const obj = await response.json()
-    mssg8.innerHTML = "ERROR: " + obj.message
+    h1.innerHTML = obj.message
+    h1.innerHTML = "Thank you for signing up! You will get a verification email soon after!"
 }
 else if (response.status == 400){
-    mssg8.innerHTML = "Server error"
+    h1.innerHTML = "Server error"
+    setTimeout(() => {
+        location.href = "index.html"
+    }, 2000)
 }
 }
 
-document.addEventListener("click", fetchUsingDataFromForm)
+document.querySelector("#submitButton").addEventListener("click", fetchUsingDataFromForm)
