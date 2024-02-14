@@ -1,7 +1,7 @@
 async function fetchUsingDataFromForm(){
     const mssg8 = document.querySelector("#message8")
     const input = document.querySelector("#input8")
-    const url = "https://janas-api-server.azurewebsites.net/user"
+    const url = "https://janas-api-server.azurewebsites.net"
     const data = {
         code: InputDeviceInfo.value
     }
