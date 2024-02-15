@@ -29,7 +29,7 @@ createAccountForm.addEventListener('submit', async function (event) {
         //profile_pic: profile_pic,
     };
 
-    if (psw !== psw-repeat) {
+    if (psw !== pswRepeat) {
         message.textContent = 'Passwords do not match.';
         message.style.color = 'red';
     } else {
