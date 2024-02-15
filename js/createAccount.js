@@ -2,13 +2,10 @@ document.addEventListener('DOMContentLoaded', function () {
     const createAccountModal = document.getElementById('id01');
     const createAccountBtn = document.getElementById('submitButton');
    // const closeBtn = document.getElementsByClassName('close')[0];
-    const createAccountForm = document.getElementById('formData');
+    const createAccountForm = document.getElementById('submitButton');
     const message = document.getElementById('message');
 
-    // Show modal
-    createAccountBtn.onclick = function () {
-        createAccountModal.style.display = 'block';
-    }
+    
 
 
 createAccountForm.addEventListener('submit', async function (event) {
