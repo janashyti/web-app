@@ -1,6 +1,6 @@
 document.addEventListener('DOMContentLoaded', function () {
-    const createAccountModal = document.getElementById('id01');
-    const createAccountBtn = document.getElementById('submitButton');
+    //const createAccountModal = document.getElementById('id01');
+    //const createAccountBtn = document.getElementById('submitButton');
    // const closeBtn = document.getElementsByClassName('close')[0];
     const createAccountForm = document.getElementById('submitButton');
     const message = document.getElementById('message');
@@ -8,14 +8,14 @@ document.addEventListener('DOMContentLoaded', function () {
     
 
 
-createAccountForm.addEventListener('submit', async function (event) {
+createAccountForm.addEventListener('submitButton', async function (event) {
     event.preventDefault();
 
     const email = document.getElementById('email').value;
     const username = document.getElementById('username').value;
-    const password = document.getElementById('psw').value;
-    const confirmPassword = document.getElementById('psw-repeat').value;
-    const majors = document.getElementById('school').value;
+    const psw = document.getElementById('psw').value;
+    const pswRepeat = document.getElementById('psw-repeat').value;
+    const major = document.getElementById('school').value;
     const school = document.getElementById('major').value;
     //const profile_pic = document.getElementById('profile_pic').value;
 
@@ -23,7 +23,7 @@ createAccountForm.addEventListener('submit', async function (event) {
         email: email,
         username: username,
         password: psw,
-        confirmPassword: psw-repeat,
+        confirmPassword: pswRepeat,
         major: [major],
         school: school,
         //profile_pic: profile_pic,
