@@ -3,7 +3,7 @@ document.addEventListener('DOMContentLoaded', function () {
     //const createAccountBtn = document.getElementById('submitButton');
    // const closeBtn = document.getElementsByClassName('close')[0];
     const createAccountForm = document.getElementById('submitButton');
-    const message = document.getElementById('message');
+    const message = document.querySelector("p");
 
     
 
@@ -38,7 +38,7 @@ createAccountForm.addEventListener('submit', async function (event) {
 });
 
 async function createAccount(userData) {
-    const mssg = document.querySelector("#message");
+    const mssg = document.querySelector("p");
     const url = "https://janas-api-server.azurewebsites.net/user";
 
     try {
