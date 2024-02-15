@@ -1,7 +1,7 @@
 async function fetchUsingDataFromForm(){
     const h1 = document.querySelector("h1")
     const url = "https://janas-api-server.azurewebsites.net/user"
-    const input = document.querySelector("#formData")
+    const input = document.getElementById('formData')
     const data = {
         code: input.value
     }
