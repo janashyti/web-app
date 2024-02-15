@@ -8,7 +8,7 @@ document.addEventListener('DOMContentLoaded', function () {
     
 
 
-createAccountForm.addEventListener('submitButton', async function (event) {
+createAccountForm.addEventListener('submit', async function (event) {
     event.preventDefault();
 
     const email = document.getElementById('email').value;
