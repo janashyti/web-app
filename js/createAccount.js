@@ -29,5 +29,5 @@ else if (response.status == 400){
 }
 }
 
-//document.querySelector("#submitButton").addEventListener("click", fetchUsingDataFromForm)
-fetchUsingDataFromForm()
+document.querySelector("#submitButton").addEventListener("click", fetchUsingDataFromForm)
+//fetchUsingDataFromForm()
