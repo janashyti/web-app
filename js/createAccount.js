@@ -1,33 +1,101 @@
-async function fetchUsingDataFromForm(){
-    const h1 = document.querySelector("h1")
-    const url = "https://janas-api-server.azurewebsites.net/user"
-    const input = document.getElementById('formData')
-    const data = {
-        code: input.value
+document.addEventListener('DOMContentLoaded', function () {
+    const createAccountModal = document.getElementById('id01');
+    const createAccountBtn = document.getElementById('submitButton');
+   // const closeBtn = document.getElementsByClassName('close')[0];
+    const createAccountForm = document.getElementById('formData');
+    const message = document.getElementById('message');
+
+    // Show modal
+    createAccountBtn.onclick = function () {
+        createAccountModal.style.display = 'block';
     }
 
 
-const options = {
-    method: "POST",
-    headers: {"Content-Type": "application/json" },
-    body: JSON.stringify(data)
+createAccountForm.addEventListener('submit', async function (event) {
+    event.preventDefault();
 
-} 
+    const email = document.getElementById('email').value;
+    const username = document.getElementById('username').value;
+    const password = document.getElementById('psw').value;
+    const confirmPassword = document.getElementById('psw-repeat').value;
+    const majors = document.getElementById('school').value;
+    const school = document.getElementById('major').value;
+    //const profile_pic = document.getElementById('profile_pic').value;
 
-let response = await fetch(url, options)
+    const userData = {
+        email: email,
+        username: username,
+        password: psw,
+        confirmPassword: psw-repeat,
+        major: [major],
+        school: school,
+        //profile_pic: profile_pic,
+    };
 
-if (response.status == 201){
-    const obj = await response.json()
-    h1.innerHTML = obj.message
-    h1.innerHTML = "Thank you for signing up! You will get a verification email soon after!"
+    if (psw !== psw-repeat) {
+        message.textContent = 'Passwords do not match.';
+        message.style.color = 'red';
+    } else {
+        createAccount(userData);
+    }
+});
+
+async function createAccount(userData) {
+    const mssg = document.querySelector("#message");
+    const url = "https://janas-api-server.azurewebsites.net/user";
+
+    try {
+        const response = await fetch(url, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify(userData)
+        });
+
+        if (response.ok) {
+            try {
+                const data = await response.json();
+                mssg.innerHTML = data.message;
+                message.textContent = 'Verification email has been sent to ' + userData.email;
+                message.style.color = 'green';
+            } catch (error) {
+                console.error('Error parsing JSON response:', error.message);
+                // Ignore error parsing JSON
+                mssg.innerHTML = 'Verification email has been sent to ' + userData.email;
+                mssg.style.color = 'green';
+            }
+        } else {
+            const errorData = await response.json();
+            mssg.innerHTML = "Error: " + errorData.message;
+            mssg.style.color = 'red';
+        }
+    } catch (error) {
+        console.error('Error:', error.message);
+        mssg.innerHTML = "Error: " + error.message;
+        mssg.style.color = 'red';
+    }
 }
-else if (response.status == 400){
-    h1.innerHTML = "Server error"
-    setTimeout(() => {
-        location.href = "index.html"
-    }, 2000)
-}
-}
 
-document.querySelector("#submitButton").addEventListener("click", fetchUsingDataFromForm)
-//fetchUsingDataFromForm()
+
+
+
+});
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
