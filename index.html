@@ -48,23 +48,32 @@
 
 
 
-          <form action="https://janas-api-server.azurewebsites.net/user/login">
-           <label for="email">Email:</label>
-          <input type="email" name="email"><br><br>
-          <label for="password">Password:</label>
-          <input type="password" name="password"><br><br>
-          <input type="submit" value="Submit">
-          </form>
-
-
-
-
-
-
-
-
-
-
+         
+                <button onclick="document.getElementById('id02').style.display='block'" style="width:auto;">Log in</button>
+                
+                <div id="id02" class="modal">
+                  <span onclick="document.getElementById('id02').style.display='none'" class="close" title="Close Modal">&times;</span>
+                  <form method = "post" class="modal-content" id = "formData" action = "https://janas-api-server.azurewebsites.net/user/login">
+                    <div class="container">
+                      <h1>Log in</h1>
+                      <hr>
+                      <label for="email"><b>Email</b></label>
+                      <input type="text" placeholder="Enter Email" name="email" id = "email" required>
+                
+                      <label for="psw"><b>Password</b></label>
+                      <input type="password" placeholder="Enter Password" name="psw" id = "psw" required>
+                      
+                      <label>
+                        <input type="checkbox" checked="checked" name="remember" style="margin-bottom:15px"> Remember me
+                      </label>
+                
+                      <div class="clearfix">
+                        <button type="button" onclick="document.getElementById('id02').style.display='none'" class="cancelbtn">Cancel</button>
+                        <button type="submit" class="signupbtn" id = "submitButton">Sign Up</button>
+                      </div>
+                    </div>
+                  </form>
+                </div>
 
 
 
@@ -76,11 +85,19 @@
                 <script src = "js/createAccount.js">
                 // Get the modal
                 var modal = document.getElementById('id01');
+                var modal2 = document.getElementById('id01');
                 
                 // When the user clicks anywhere outside of the modal, close it
                 window.onclick = function(event) {
                   if (event.target == modal) {
                     modal.style.display = "none";
+                  }
+                }
+
+
+                window.onclick = function(event) {
+                  if (event.target == modal2) {
+                    modal2.style.display = "none";
                   }
                 }
                 </script>
