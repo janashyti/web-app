@@ -50,7 +50,7 @@ document.querySelector("#logoutButton").addEventListener('click', async () => {
     }
     else {
         console.log("error logging out")
-        document.querySelector("p").innerHTML = "IServer Error"
+        document.querySelector("p").innerHTML = "Server Error"
     }
 
     await sleepNow(3)
