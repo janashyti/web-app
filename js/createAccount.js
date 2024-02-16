@@ -1,3 +1,11 @@
+const token = localStorage.getItem("token");
+console.log("token: " + token)
+
+if (token) {
+    location.href="main.html"
+}
+
+
 document.addEventListener('DOMContentLoaded', function () {
     const createAccountForm = document.getElementById('submitButton');
     const message = document.querySelector("p");
