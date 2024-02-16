@@ -1,7 +1,4 @@
 document.addEventListener('DOMContentLoaded', function () {
-    //const createAccountModal = document.getElementById('id01');
-    //const createAccountBtn = document.getElementById('submitButton');
-   // const closeBtn = document.getElementsByClassName('close')[0];
     const createAccountForm = document.getElementById('submitButton');
     const message = document.querySelector("p");
 
@@ -75,8 +72,6 @@ async function createAccount(userData) {
 }
 
 
-
-
 });
 
 
@@ -85,7 +80,75 @@ async function createAccount(userData) {
 
 
 
+const sleepNow = (delay) => new Promise((resolve) => setTimeout(resolve, delay * 1000))
 
+
+document.querySelector("#loginButton").addEventListener('click', async () => {
+
+    console.log("login")
+
+    const url = "https://janas-api-server.azurewebsites.net/user/login"
+    console.log(url)
+
+    const emailLogin = document.querySelector("#emailLogin")
+    console.log(email.value)
+    const passwordLogin = document.querySelector("#pswdLogin")
+    console.log(password.value)
+
+    const data = {
+        email: emailLogin.value,
+        password: passwordLogin.value
+    }
+    console.log(data)
+
+    const body = JSON.stringify(data)
+    console.log(body)
+
+    const options = {
+        method: "POST",
+        headers: {
+            "Content-Type": 'application/json'
+        },
+        body
+    }
+
+    console.log('calling fetch')
+
+    let response = await fetch(url, options)
+
+    console.log(response)
+    console.log(response.status)
+
+    console.log('fetch returned')
+
+    if (response.status === 200) {
+        console.log("logged in successfully.")
+        const body = await response.json();
+        console.log(body)
+        console.log(JSON.stringify(body.user))
+
+        localStorage.setItem("user", JSON.stringify(body.user));
+        localStorage.setItem("token", body.token);
+
+        location.href = "main.html"
+    }
+    else if (response.status === 401) {
+        console.log('failed to log in')
+        document.querySelector("#errorMssg").innerHTML = "Email has not been validated."
+    }
+    else {
+        console.log("error logging in")
+        document.querySelector("#errorMssg").innerHTML = "Invalid credentials."
+    }
+
+    await sleepNow(3)
+
+    email.value = ''
+    password.value = ''
+    document.querySelector("#errorMssg").innerHTML = ''
+
+
+})
 
 
 
