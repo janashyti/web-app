@@ -91,9 +91,9 @@ document.querySelector("#loginButton").addEventListener('click', async () => {
     console.log(url)
 
     const emailLogin = document.querySelector("#emailLogin")
-    console.log(email.value)
+    console.log(emailLogin.value)
     const passwordLogin = document.querySelector("#pswdLogin")
-    console.log(password.value)
+    console.log(passwordLogin.value)
 
     const data = {
         email: emailLogin.value,
@@ -134,18 +134,18 @@ document.querySelector("#loginButton").addEventListener('click', async () => {
     }
     else if (response.status === 401) {
         console.log('failed to log in')
-        document.querySelector("#errorMssg").innerHTML = "Email has not been validated."
+        document.querySelector("p").innerHTML = "Email has not been validated."
     }
     else {
         console.log("error logging in")
-        document.querySelector("#errorMssg").innerHTML = "Invalid credentials."
+        document.querySelector("p").innerHTML = "Invalid credentials."
     }
 
     await sleepNow(3)
 
-    email.value = ''
-    password.value = ''
-    document.querySelector("#errorMssg").innerHTML = ''
+    emailLogin.value = ''
+    passwordLogin.value = ''
+    document.querySelector("p").innerHTML = ''
 
 
 })
