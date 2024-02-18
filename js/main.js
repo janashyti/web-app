@@ -3,32 +3,22 @@ const token = localStorage.getItem("token");
 console.log("token: " + token)
 
 
-document.querySelector("#logoutButton").addEventListener('click', async () => {
+document.querySelector("#logoutButton").addEventListener('click', async function (event) {
 
     console.log("logout")
+    const token = localStorage.getItem("token");
 
     const url = "https://janas-api-server.azurewebsites.net/user/logout"
     console.log(url)
 
     
 
-    const data = {
-        token
-    }
-    console.log(data)
-
-    const body = JSON.stringify(data)
-    console.log(body)
-
     const options = {
         method: "PATCH",
         headers: {
-            "Content-Type": 'application/json'
-        },
-        body
+            "Authorization": `Bearer ${token}`}
     }
 
-    console.log('calling fetch')
 
     let response = await fetch(url, options)
 
@@ -39,35 +29,12 @@ document.querySelector("#logoutButton").addEventListener('click', async () => {
 
     if (response.status === 200) {
         console.log("logged out successfully.")
-        const body = await response.json();
-        console.log(body)
-        console.log(JSON.stringify(body.user))
-
-        localStorage.deleteItem("user", JSON.stringify(body.user));
-        localStorage.deleteItem("token", body.token);
-
+        localStorage.removeItem(token);
         location.href = "index.html"
     }
-    else {
-        console.log("error logging out")
-        document.querySelector("p").innerHTML = "Server Error"
+    else if (response.status === 401) {
+        console.log('failed to log out')
+        document.querySelector("p").innerHTML = "Could not log out."
     }
 
-    await sleepNow(3)
-
-    emailLogout.value = ''
-    passwordLogout.value = ''
-    document.querySelector("p").innerHTML = ''
-
-
 })
-
-
-
-
-
-
-
-
-
-

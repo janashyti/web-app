@@ -2,26 +2,45 @@
 //console.log("token: " + token)
 
 //if (token) {
-  //  location.href="main.html"
+//  location.href="main.html"
 //}
 
+console.log(createAccountButton)
 
-document.addEventListener('DOMContentLoaded', function () {
-    const createAccountForm = document.getElementById('submitButton');
-    const message = document.querySelector("p");
+const message = document.querySelector("p");
 
-    
+// Get the modal
+var modal = document.getElementById('id01');
+var modal2 = document.getElementById('id02');
+
+// When the user clicks anywhere outside of the modal, close it
+/*
+window.onclick = function (event) {
+    if (event.target == modal) {
+        modal.style.display = "none";
+    }
+}
+
+window.onclick = function (event) {
+    if (event.target == modal2) {
+        modal2.style.display = "none";
+    }
+}
+*/
+
+console.log('loading')
 
 
-createAccountForm.addEventListener('submit', async function (event) {
-    event.preventDefault();
+document.querySelector("#createAccountButton").addEventListener('click', async function (event) {
+    //event.preventDefault();
+    console.log('test1')
 
     const email = document.getElementById('email').value;
     const username = document.getElementById('username').value;
     const psw = document.getElementById('psw').value;
     const pswRepeat = document.getElementById('psw-repeat').value;
-    const major = document.getElementById('school').value;
-    const school = document.getElementById('major').value;
+    const major = document.getElementById('major').value;
+    const school = document.getElementById('school').value;
     //const profile_pic = document.getElementById('profile_pic').value;
 
     const userData = {
@@ -38,6 +57,7 @@ createAccountForm.addEventListener('submit', async function (event) {
         message.textContent = 'Passwords do not match.';
         message.style.color = 'red';
     } else {
+        console.log('test2')
         createAccount(userData);
     }
 });
@@ -45,7 +65,8 @@ createAccountForm.addEventListener('submit', async function (event) {
 async function createAccount(userData) {
     const mssg = document.querySelector("p");
     const url = "https://janas-api-server.azurewebsites.net/user";
-
+    console.log('test3')
+    console.log(userData)
     try {
         const response = await fetch(url, {
             method: "POST",
@@ -54,13 +75,16 @@ async function createAccount(userData) {
             },
             body: JSON.stringify(userData)
         });
-
+console.log("test4")
         if (response.ok) {
+            console.log('test5')
             try {
                 const data = await response.json();
+                console.log(data)
                 mssg.innerHTML = data.message;
                 message.textContent = 'Verification email has been sent to ' + userData.email;
                 message.style.color = 'green';
+                location.href = "index.html"
             } catch (error) {
                 console.error('Error parsing JSON response:', error.message);
                 // Ignore error parsing JSON
@@ -79,17 +103,7 @@ async function createAccount(userData) {
     }
 }
 
-
-});
-
-
-
-
-
-
-
 const sleepNow = (delay) => new Promise((resolve) => setTimeout(resolve, delay * 1000))
-
 
 document.querySelector("#loginButton").addEventListener('click', async () => {
 
@@ -100,7 +114,7 @@ document.querySelector("#loginButton").addEventListener('click', async () => {
 
     const emailLogin = document.querySelector("#emailLogin")
     console.log(emailLogin.value)
-    const passwordLogin = document.querySelector("#pswdLogin")
+    const passwordLogin = document.querySelector("#pswLogin")
     console.log(passwordLogin.value)
 
     const data = {
@@ -154,16 +168,6 @@ document.querySelector("#loginButton").addEventListener('click', async () => {
     emailLogin.value = ''
     passwordLogin.value = ''
     document.querySelector("p").innerHTML = ''
-
-
 })
-
-
-
-
-
-
-
-
 
 
