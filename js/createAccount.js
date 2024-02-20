@@ -1,9 +1,9 @@
-//const token = localStorage.getItem("token");
-//console.log("token: " + token)
+const token = localStorage.getItem("token");
+console.log("token: " + token)
 
-//if (token) {
-//  location.href="main.html"
-//}
+if (token) {
+  location.href="main.html"
+}
 
 console.log(createAccountButton)
 
@@ -13,20 +13,6 @@ const message = document.querySelector("p");
 var modal = document.getElementById('id01');
 var modal2 = document.getElementById('id02');
 
-// When the user clicks anywhere outside of the modal, close it
-/*
-window.onclick = function (event) {
-    if (event.target == modal) {
-        modal.style.display = "none";
-    }
-}
-
-window.onclick = function (event) {
-    if (event.target == modal2) {
-        modal2.style.display = "none";
-    }
-}
-*/
 
 console.log('loading')
 
@@ -84,7 +70,7 @@ console.log("test4")
                 mssg.innerHTML = data.message;
                 message.textContent = 'Verification email has been sent to ' + userData.email;
                 message.style.color = 'green';
-                location.href = "index.html"
+                location.href = "email.html"
             } catch (error) {
                 console.error('Error parsing JSON response:', error.message);
                 // Ignore error parsing JSON

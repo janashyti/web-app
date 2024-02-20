@@ -8,10 +8,46 @@
 <body>
     <h1>Main Page</h1>
     <p></p>
-
+    <div id = "main">
     <button type="button" class="signupbtn" id = "logoutButton">Log out</button>
 
-    <script src="js/main.js"></script>
-</body>
+    <button onclick="document.getElementById('createStudyGroupModule').style.display='block'" style="width:auto;">Create Study Group</button>
+     <div id="createStudyGroupModule" class="modal">
+        <span onclick="document.getElementById('createStudyGroupModule').style.display='none'" class="close"
+          title="Close Modal">&times;</span>
+        <form method="post" class="modal-content" id="createStudyGroupData">
+          <div class="container">
+            <h1>Create Study Group</h1>
+            <hr>
+            <label for="name"><b>Study Group Name</b></label>
+            <input type="text" placeholder="Enter Study Group Name" name="name" id="name" required>
+  
+            <label for="owner"><b>Email</b></label>
+            <input type="email" placeholder="Enter Your Email Addres" name="owner" id="owner" required>
+            
+            <label for="is_public"><b>Public/Private Preference</b></label>
+            <input type="boolean" placeholder="Enter Your Public/Private Prefernce" name="is_public" id="is_public" required>
+
+            <label for="max_participants"><b>Maximum number of participants</b></label>
+            <input type="integer" placeholder="Enter the maximum number of participants" name="max_participants" id="max_participants" required>
+            
+            <label>
+              <input type="checkbox" checked="checked" name="remember" style="margin-bottom:15px"> Remember me
+            </label>
+  
+            <div class="clearfix">
+              <button type="button" onclick="document.getElementById('createStudyGroupModule').style.display='none'"
+                class="cancelbtn">Cancel</button>
+              <button type="button" class="signupbtn" id="createStudyGroupButton">Create Study group</button>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+   </div>
+
+    
+    <script type = "module" src="js/main.js"></script>
+  </body>
 
 </html>
