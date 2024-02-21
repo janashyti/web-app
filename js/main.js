@@ -58,29 +58,42 @@ document.querySelector("#createStudyGroupButton").addEventListener('click', asyn
 
     const name = document.getElementById('name').value;
     const owner = document.getElementById('owner').value;
-    //const psw = document.getElementById('psw').value;
     const is_public = document.getElementById('is_public').value;
     const max_participants = document.getElementById('max_participants').value;
-    //const school = document.getElementById('school').value;
-    //const profile_pic = document.getElementById('profile_pic').value;
+    const start_date = document.getElementById('start_date').value;
+    const end_date = document.getElementById('end_date').value;
+    const day = document.getElementById('day').value;
+    const time = document.getElementById('time').value;
+    const location = document.getElementById('location').value;
+    const description = document.getElementById('description').value;
+    const school = document.getElementById('school').value;
+    const course_number = document.getElementById('course_number').value;
+    const participants = document.getElementById('participants').value;
 
-    const userData = {
+    const studyGroupData = {
         name: name,
         owner: owner,
         is_public: is_public,
         max_participants: max_participants,
+        start_date: start_date,
+        end_date: end_date,
+        meeting_times: [{day}, {time}, {location}],
+        description: description,
+        school: school,
+        course_number: course_number,
+        participants: [participants]
     };
 
    
-        createStudyGroup(userData);
+        createStudyGroup(studyGroupData);
 });
 
-async function createStudyGroup(userData) {
+async function createStudyGroup(studyGroupData) {
     const mssg = document.querySelector("p");
     const url = "https://janas-api-server.azurewebsites.net/studygroup";
     const token = localStorage.getItem("token");
     console.log('test3')
-    console.log(userData)
+    console.log(studyGroupData)
     try {
         const response = await fetch(url, {
             method: "POST",
@@ -88,7 +101,7 @@ async function createStudyGroup(userData) {
                 "Authorization": `Bearer ${token}`,
                 "Content-Type": "application/json"
             },
-            body: JSON.stringify(userData)
+            body: JSON.stringify(studyGroupData)
         });
 console.log("test4")
         if (response.ok) {

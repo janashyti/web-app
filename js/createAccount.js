@@ -1,9 +1,9 @@
 const token = localStorage.getItem("token");
 console.log("token: " + token)
 
-if (token) {
-  location.href="main.html"
-}
+//if (token) {
+//location.href="main.html"
+//}
 
 console.log(createAccountButton)
 
