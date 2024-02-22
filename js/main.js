@@ -47,9 +47,29 @@ const message = document.querySelector("p");
 
 // Get the modal
 var modal = document.getElementById('createStudyGroupModule');
-
+var modal = document.getElementById('meetingTimesModal');
 
 console.log('loading')
+
+function closeMe() {
+    document.querySelector('#meetingTimesModal').style.display = "none";
+  }
+
+ let times = [{}];
+ console.log("oni: " + times);
+    document.querySelector("#sendMeetingTimes").addEventListener('click', async function (event) {
+    console.log("jana")
+    let day = document.getElementById('day').value;
+    let time = document.getElementById('time').value;
+    let location = document.getElementById('location').value;
+    times.push({day, time, location});
+    console.log(times)
+    document.querySelector('#day').value = undefined;
+    document.querySelector('#time').value = undefined;
+    document.querySelector('#location').value = undefined;
+    closeMe();
+}); 
+times.splice(0,1)
 
 
 document.querySelector("#createStudyGroupButton").addEventListener('click', async function (event) {
@@ -60,33 +80,64 @@ document.querySelector("#createStudyGroupButton").addEventListener('click', asyn
     const owner = document.getElementById('owner').value;
     const is_public = document.getElementById('is_public').value;
     const max_participants = document.getElementById('max_participants').value;
-    const start_date = document.getElementById('start_date').value;
-    const end_date = document.getElementById('end_date').value;
-    const day = document.getElementById('day').value;
-    const time = document.getElementById('time').value;
-    const location = document.getElementById('location').value;
+    let start_date = document.getElementById('start_date').value;
+    let end_date = document.getElementById('end_date').value;
+    let day = document.getElementById('day').value;
+    let time = document.getElementById('time').value;
+    let location = document.getElementById('location').value;
     const description = document.getElementById('description').value;
     const school = document.getElementById('school').value;
     const course_number = document.getElementById('course_number').value;
     const participants = document.getElementById('participants').value;
+
+    if(start_date == false){
+        start_date = undefined;
+    }
+
+    if(end_date == false){
+        end_date = undefined;
+    }
+
+    //const isTrue = (time) ? true : false
+    //console.log(`***${time}*** isTrue: ${isTrue}`) 
+    
+
 
     const studyGroupData = {
         name: name,
         owner: owner,
         is_public: is_public,
         max_participants: max_participants,
-        //start_date: start_date,
-        //end_date: end_date,
-        //meeting_times: [{day}, {time}, {location}],
+        start_date: start_date,
+        end_date: end_date,
+        meeting_times: times,
         description: description,
         school: school,
         course_number: course_number,
         participants: [participants]
     };
 
-   
-        createStudyGroup(studyGroupData);
+    if(time == false || day == false || location == false){
+        const studyGroupData2 = {
+            name: name,
+            owner: owner,
+            is_public: is_public,
+            max_participants: max_participants,
+            start_date: start_date,
+            end_date: end_date,
+            description: description,
+            school: school,
+            course_number: course_number,
+            participants: [participants]
+        };
+        createStudyGroup(studyGroupData2);
+    }
+
+    else{
+     createStudyGroup(studyGroupData);
+    }
 });
+
 
 async function createStudyGroup(studyGroupData) {
     const mssg = document.querySelector("p");
@@ -112,10 +163,12 @@ console.log("test4")
                 mssg.innerHTML = data.message;
                 message.textContent = 'Thank you! Your study Group has been created!'
                 message.style.color = 'green';
+                location.href = "main.html";
             } catch (error) {
                 console.error('Error parsing JSON response:', error.message);
                 // Ignore error parsing JSON
                  mssg.style.color = 'green';
+                 location.href = "main.html";
             }
         } else {
             const errorData = await response.json();
