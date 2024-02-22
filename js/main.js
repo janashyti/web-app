@@ -51,9 +51,9 @@ var modal = document.getElementById('meetingTimesModal');
 
 console.log('loading')
 
-function closeMe() {
-    document.querySelector('#meetingTimesModal').style.display = "none";
-  }
+//function closeMe() {
+  //  document.querySelector('#meetingTimesModal').style.display = "none";
+  //}
 
  let times = [{}];
  console.log("oni: " + times);
@@ -67,7 +67,7 @@ function closeMe() {
     document.querySelector('#day').value = undefined;
     document.querySelector('#time').value = undefined;
     document.querySelector('#location').value = undefined;
-    closeMe();
+    
 }); 
 times.splice(0,1)
 
