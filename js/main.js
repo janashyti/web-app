@@ -165,10 +165,10 @@ console.log("test4")
                 message.style.color = 'green';
                 location.href = "main.html";
             } catch (error) {
-                console.error('Error parsing JSON response:', error.message);
+              //  console.error('Error parsing JSON response:', error.message);
                 // Ignore error parsing JSON
                  mssg.style.color = 'green';
-                 location.href = "main.html";
+                location.href = "main.html";
             }
         } else {
             const errorData = await response.json();
