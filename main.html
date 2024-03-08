@@ -98,6 +98,42 @@
   </div>
 
 
+  <button onclick="document.getElementById('searchStudyGroup').style.display='block'" style="width:auto;">Search For Study Group</button>
+    <div id="searchStudyGroup" class="modal">
+      <span onclick="document.getElementById('searchStudyGroup').style.display='none'" class="close"
+        title="Close Modal">&times;</span>
+      <form method="get" class="modal-content" id="searchFormData">
+        <div class="container">
+          <h1>Search Study Group</h1>
+          <hr>
+          <label for="ongoing"><b>I am looking for ongoing study groups</b></label>
+          <input placeholder="Enter true/false" type="boolean" id="ongoing" name="ongoing">
+          
+          <label for="sortBy"><b>Sorting type</b></label>
+          <input placeholder="Enter asc/desc" type="text" id="sortBy" name="sortBy">
+          
+          <label for="search"><b>Search</b></label>
+          <input type="text" placeholder="Enter study group name/description" name="search" id="search">
+
+          <label for="skip"><b>Skip value</b></label>
+          <input placeholder="Enter # value" type="text" id="skip" name="skip">
+
+          <div class="clearfix">
+            <button type="button" onclick="document.getElementById('searchStudyGroup').style.display='none'"
+              class="cancelbtn">Cancel</button>
+            <button type="button" class="searchbtn" id="searchButton">Search</button>
+          </div>
+        </div>
+      </form>
+    </div>
+
+    <div id="searchPrint">
+
+    </div>
+
+
+
+
   <script type="module" src="js/main.js"></script>
 </body>
 

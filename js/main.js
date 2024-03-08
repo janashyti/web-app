@@ -55,7 +55,7 @@ console.log('loading')
   //  document.querySelector('#meetingTimesModal').style.display = "none";
   //}
 
- let times = [{}];
+ let times = [];
  console.log("oni: " + times);
     document.querySelector("#sendMeetingTimes").addEventListener('click', async function (event) {
     console.log("jana")
@@ -69,7 +69,7 @@ console.log('loading')
     document.querySelector('#location').value = undefined;
     
 }); 
-times.splice(0,1)
+
 
 
 document.querySelector("#createStudyGroupButton").addEventListener('click', async function (event) {
@@ -181,3 +181,181 @@ console.log("test4")
         mssg.style.color = 'red';
     }
 }
+
+
+document.querySelector("#searchButton").addEventListener('click', async () =>{
+    console.log("search")
+    let url = `https://janas-api-server.azurewebsites.net/studygroups?`
+    console.log(url)
+
+    const ongoing = document.querySelector("#ongoing")
+    console.log(ongoing.value)
+    const sortBy = document.querySelector("#sortBy")
+    console.log(sortBy.value)
+    const search = document.querySelector("#search")
+    console.log(search.value)
+    const skip = document.querySelector("#skip")
+    console.log(skip.value)
+
+    const studyGroupSearchData = {
+        ongoing: ongoing.value,
+        sortBy: sortBy.value,
+        search: search.value,
+        skip: skip.value
+    }
+    console.log(studyGroupSearchData)
+    
+    console.log("searching")
+
+    const h1 = document.querySelector("h1")
+    const p = document.querySelector("p")
+
+    if (!token) {
+        h1.innerHTML = "Something went wrong."
+        p.innerHTML = "Please try again!"
+
+        console.log("No token found")
+
+        return
+    }
+
+    console.log("test")
+if(skip.value == ""){
+    if(ongoing.value == "true" || ongoing.value == "false"){
+        console.log("ongoing" + ongoing.value)
+       if(sortBy.value === "asc" || sortBy.value === "desc"){
+            url = `https://janas-api-server.azurewebsites.net/studygroups?ongoing=${ongoing.value}&sortBy=name:${sortBy.value}&limit=${5}`
+            console.log(url)
+            if(search.value != ""){
+                url = `https://janas-api-server.azurewebsites.net/studygroups?ongoing=${ongoing.value}&sortBy=name:${sortBy.value}&search=${search.value}&limit=${4}`
+                console.log(url)  
+            }
+       }
+       else if(search.value != ""){
+            url = `https://janas-api-server.azurewebsites.net/studygroups?ongoing=${ongoing.value}&search=${search.value}&limit=${4}`
+            console.log(url)  
+        }
+        else url = `https://janas-api-server.azurewebsites.net/studygroups?ongoing=${ongoing.value}&limit=${4}`
+        console.log(url)
+    }
+
+    else if(sortBy.value == "asc" || sortBy.value == "desc"){
+        if(search.value == ""){
+            url = `https://janas-api-server.azurewebsites.net/studygroups?sortBy=name:${sortBy.value}&limit=${4}`
+            console.log(url)
+        }
+        else url = `https://janas-api-server.azurewebsites.net/studygroups?sortBy=name:${sortBy.value}&search=${search.value}&limit=${4}`
+            console.log(url)
+    }
+
+    else if(ongoing.value == "" && sortBy.value == "" && search.value != ""){
+        url = `https://janas-api-server.azurewebsites.net/studygroups?search=${search.value}&limit=${4}`
+            console.log(url)
+    }
+}
+
+
+
+else if (skip.value != ""){
+    if(ongoing.value == "true" || ongoing.value == "false"){
+        console.log("ongoing" + ongoing.value)
+       if(sortBy.value === "asc" || sortBy.value === "desc"){
+            url = `https://janas-api-server.azurewebsites.net/studygroups?ongoing=${ongoing.value}&sortBy=name:${sortBy.value}&limit=${5}&skip=${skip.value}`
+            console.log(url)
+            if(search.value != ""){
+                url = `https://janas-api-server.azurewebsites.net/studygroups?ongoing=${ongoing.value}&sortBy=name:${sortBy.value}&search=${search.value}&limit=${4}&skip=${skip.value}`
+                console.log(url)  
+            }
+       }
+       else if(search.value != ""){
+            url = `https://janas-api-server.azurewebsites.net/studygroups?ongoing=${ongoing.value}&search=${search.value}&limit=${4}&skip=${skip.value}`
+            console.log(url)  
+        }
+        else url = `https://janas-api-server.azurewebsites.net/studygroups?ongoing=${ongoing.value}&limit=${4}&skip=${skip.value}`
+        console.log(url)
+    }
+
+    else if(sortBy.value == "asc" || sortBy.value == "desc"){
+        if(search.value == ""){
+            url = `https://janas-api-server.azurewebsites.net/studygroups?sortBy=name:${sortBy.value}&limit=${4}&skip=${skip.value}`
+            console.log(url)
+        }
+        else url = `https://janas-api-server.azurewebsites.net/studygroups?sortBy=name:${sortBy.value}&search=${search.value}&limit=${4}&skip=${skip.value}`
+            console.log(url)
+    }
+
+    else if(ongoing.value == "" && sortBy.value == "" && search.value != ""){
+        url = `https://janas-api-server.azurewebsites.net/studygroups?search=${search.value}&limit=${4}&skip=${skip.value}`
+            console.log(url)
+        
+    }
+    else{
+        url = `https://janas-api-server.azurewebsites.net/studygroups?limit=${4}&skip=${skip.value}`
+            console.log(url)
+    }
+}
+
+function createTableWithInnerHTML(jsonObject) {
+    let tableHTML = '<table border="1"><tr>';
+
+    Object.keys(jsonObject[0]).forEach(key => {
+        tableHTML += `<th>${key}</th>`;
+    });
+
+    tableHTML += '</tr>';
+
+    jsonObject.forEach(item => {
+        tableHTML += '<tr>';
+        Object.values(item).forEach(value => {
+            tableHTML += `<td>${value}</td>`;
+        });
+        tableHTML += '</tr>';
+    });
+
+    tableHTML += '</table>';
+
+    document.writeln(tableHTML);
+}
+
+
+    console.log("test2")
+
+    const options = {
+        method: "GET",
+        headers: {
+            Authorization: `Bearer ${token}`
+        }
+    }
+
+    let response = await fetch(url, options)
+
+    if (response.status == 200) {
+        h1.innerHTML = "StudyGroups"
+        let data = []
+        data = await response.json()
+        
+        console.log(data)
+        let array = []
+        array = data 
+        console.log()
+        const jsonObject = eval(data);
+        createTableWithInnerHTML(jsonObject);
+        
+     // let i
+     //  for (i = 0; i < array.length; i++){
+     //       document.writeln(JSON.stringify(array[i]))
+      //      document.writeln("   ")
+       //    }
+
+    // Object.keys(array).map((str) => console.log(array[str]));
+    
+    }
+    else {
+        h1.innerHTML = "Something went wrong."
+        p.innerHTML = "Please try again!"
+
+        console.log("Error ")
+    }
+})
+
+
