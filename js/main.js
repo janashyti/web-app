@@ -366,7 +366,7 @@ function createTableWithInnerHTML(jsonObject) {
 })
 
 
-document.querySelector('').addEventListener('click', async () =>{
+document.querySelector('#editBtn').addEventListener('click', async () =>{
     console.log("POOKIE")
 })
 
