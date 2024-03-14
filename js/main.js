@@ -1,6 +1,6 @@
 const token = localStorage.getItem("token");
-
 console.log("token: " + token)
+const user = localStorage.getItem("user");
 
 
 document.querySelector("#logoutButton").addEventListener('click', async function (event) {
@@ -337,17 +337,24 @@ function createTableWithInnerHTML(jsonObject) {
         console.log(data)
         let array = []
         array = data 
-        console.log()
-        const jsonObject = eval(data);
-        createTableWithInnerHTML(jsonObject);
-        
-     // let i
-     //  for (i = 0; i < array.length; i++){
-     //       document.writeln(JSON.stringify(array[i]))
-      //      document.writeln("   ")
-       //    }
+        let newArray = array;
+        for(let i = 0; i < array.length; i++){  
+            console.log("array.owner: " + array[i].owner) 
+            console.log("user: " + user)
+            let user_id = JSON.parse(user)
+            console.log("user_id: " + user_id)
+            let realUserId = JSON.stringify(user_id._id);
+            console.log("realUserId: " + realUserId)
+            if(JSON.stringify(array[i].owner) === realUserId){
+                //newArray = array.map(v => ({...v, edit_option: document.innerHTML = "<button id = 'editBtn' >" + "Edit" + "</button>"}))
+                newArray[i].edit_option = "<button id = 'editBtn' >" + "Edit" + "</button>"
 
-    // Object.keys(array).map((str) => console.log(array[str]));
+            }
+            
+        }
+
+        const jsonObject = eval(newArray);
+        createTableWithInnerHTML(jsonObject);
     
     }
     else {
@@ -357,5 +364,11 @@ function createTableWithInnerHTML(jsonObject) {
         console.log("Error ")
     }
 })
+
+
+document.querySelector('').addEventListener('click', async () =>{
+    console.log("POOKIE")
+})
+
 
 

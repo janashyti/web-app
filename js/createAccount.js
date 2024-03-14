@@ -135,8 +135,10 @@ document.querySelector("#loginButton").addEventListener('click', async () => {
         console.log(body)
         console.log(JSON.stringify(body.user))
 
+       // export const user_id = JSON.stringify(body.user);
         localStorage.setItem("user", JSON.stringify(body.user));
         localStorage.setItem("token", body.token);
+        localStorage.setItem("user_id", body.user.json)
 
         location.href = "main.html"
     }
