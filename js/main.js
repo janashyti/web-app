@@ -11,12 +11,13 @@ document.querySelector("#logoutButton").addEventListener('click', async function
     const url = "https://janas-api-server.azurewebsites.net/user/logout"
     console.log(url)
 
-    
+
 
     const options = {
         method: "PATCH",
         headers: {
-            "Authorization": `Bearer ${token}`}
+            "Authorization": `Bearer ${token}`
+        }
     }
 
 
@@ -41,8 +42,6 @@ document.querySelector("#logoutButton").addEventListener('click', async function
 
 
 
-console.log(createStudyGroupButton)
-
 const message = document.querySelector("p");
 
 // Get the modal
@@ -52,23 +51,23 @@ var modal = document.getElementById('meetingTimesModal');
 console.log('loading')
 
 //function closeMe() {
-  //  document.querySelector('#meetingTimesModal').style.display = "none";
-  //}
+//  document.querySelector('#meetingTimesModal').style.display = "none";
+//}
 
- let times = [];
- console.log("oni: " + times);
-    document.querySelector("#sendMeetingTimes").addEventListener('click', async function (event) {
+let times = [];
+console.log("oni: " + times);
+document.querySelector("#sendMeetingTimes").addEventListener('click', async function (event) {
     console.log("jana")
     let day = document.getElementById('day').value;
     let time = document.getElementById('time').value;
     let location = document.getElementById('location').value;
-    times.push({day, time, location});
+    times.push({ day, time, location });
     console.log(times)
     document.querySelector('#day').value = undefined;
     document.querySelector('#time').value = undefined;
     document.querySelector('#location').value = undefined;
-    
-}); 
+
+});
 
 
 
@@ -90,17 +89,17 @@ document.querySelector("#createStudyGroupButton").addEventListener('click', asyn
     const course_number = document.getElementById('course_number').value;
     const participants = document.getElementById('participants').value;
 
-    if(start_date == false){
+    if (start_date == false) {
         start_date = undefined;
     }
 
-    if(end_date == false){
+    if (end_date == false) {
         end_date = undefined;
     }
 
     //const isTrue = (time) ? true : false
     //console.log(`***${time}*** isTrue: ${isTrue}`) 
-    
+
 
 
     const studyGroupData = {
@@ -117,7 +116,7 @@ document.querySelector("#createStudyGroupButton").addEventListener('click', asyn
         participants: [participants]
     };
 
-    if(time == false || day == false || location == false){
+    if (time == false || day == false || location == false) {
         const studyGroupData2 = {
             name: name,
             owner: owner,
@@ -133,8 +132,8 @@ document.querySelector("#createStudyGroupButton").addEventListener('click', asyn
         createStudyGroup(studyGroupData2);
     }
 
-    else{
-     createStudyGroup(studyGroupData);
+    else {
+        createStudyGroup(studyGroupData);
     }
 });
 
@@ -154,7 +153,7 @@ async function createStudyGroup(studyGroupData) {
             },
             body: JSON.stringify(studyGroupData)
         });
-console.log("test4")
+        console.log("test4")
         if (response.ok) {
             console.log('test5')
             try {
@@ -165,9 +164,9 @@ console.log("test4")
                 message.style.color = 'green';
                 location.href = "main.html";
             } catch (error) {
-              //  console.error('Error parsing JSON response:', error.message);
+                //  console.error('Error parsing JSON response:', error.message);
                 // Ignore error parsing JSON
-                 mssg.style.color = 'green';
+                mssg.style.color = 'green';
                 location.href = "main.html";
             }
         } else {
@@ -183,7 +182,7 @@ console.log("test4")
 }
 
 
-document.querySelector("#searchButton").addEventListener('click', async () =>{
+document.querySelector("#searchButton").addEventListener('click', async () => {
     console.log("search")
     let url = `https://janas-api-server.azurewebsites.net/studygroups?`
     console.log(url)
@@ -204,7 +203,7 @@ document.querySelector("#searchButton").addEventListener('click', async () =>{
         skip: skip.value
     }
     console.log(studyGroupSearchData)
-    
+
     console.log("searching")
 
     const h1 = document.querySelector("h1")
@@ -220,102 +219,105 @@ document.querySelector("#searchButton").addEventListener('click', async () =>{
     }
 
     console.log("test")
-if(skip.value == ""){
-    if(ongoing.value == "true" || ongoing.value == "false"){
-        console.log("ongoing" + ongoing.value)
-       if(sortBy.value === "asc" || sortBy.value === "desc"){
-            url = `https://janas-api-server.azurewebsites.net/studygroups?ongoing=${ongoing.value}&sortBy=name:${sortBy.value}&limit=${5}`
-            console.log(url)
-            if(search.value != ""){
-                url = `https://janas-api-server.azurewebsites.net/studygroups?ongoing=${ongoing.value}&sortBy=name:${sortBy.value}&search=${search.value}&limit=${4}`
-                console.log(url)  
+    if (skip.value == "") {
+        if (ongoing.value == "true" || ongoing.value == "false") {
+            console.log("ongoing" + ongoing.value)
+            if (sortBy.value === "asc" || sortBy.value === "desc") {
+                url = `https://janas-api-server.azurewebsites.net/studygroups?ongoing=${ongoing.value}&sortBy=name:${sortBy.value}&limit=${5}`
+                console.log(url)
+                if (search.value != "") {
+                    url = `https://janas-api-server.azurewebsites.net/studygroups?ongoing=${ongoing.value}&sortBy=name:${sortBy.value}&search=${search.value}&limit=${4}`
+                    console.log(url)
+                }
             }
-       }
-       else if(search.value != ""){
-            url = `https://janas-api-server.azurewebsites.net/studygroups?ongoing=${ongoing.value}&search=${search.value}&limit=${4}`
-            console.log(url)  
-        }
-        else url = `https://janas-api-server.azurewebsites.net/studygroups?ongoing=${ongoing.value}&limit=${4}`
-        console.log(url)
-    }
-
-    else if(sortBy.value == "asc" || sortBy.value == "desc"){
-        if(search.value == ""){
-            url = `https://janas-api-server.azurewebsites.net/studygroups?sortBy=name:${sortBy.value}&limit=${4}`
-            console.log(url)
-        }
-        else url = `https://janas-api-server.azurewebsites.net/studygroups?sortBy=name:${sortBy.value}&search=${search.value}&limit=${4}`
-            console.log(url)
-    }
-
-    else if(ongoing.value == "" && sortBy.value == "" && search.value != ""){
-        url = `https://janas-api-server.azurewebsites.net/studygroups?search=${search.value}&limit=${4}`
-            console.log(url)
-    }
-}
-
-
-
-else if (skip.value != ""){
-    if(ongoing.value == "true" || ongoing.value == "false"){
-        console.log("ongoing" + ongoing.value)
-       if(sortBy.value === "asc" || sortBy.value === "desc"){
-            url = `https://janas-api-server.azurewebsites.net/studygroups?ongoing=${ongoing.value}&sortBy=name:${sortBy.value}&limit=${5}&skip=${skip.value}`
-            console.log(url)
-            if(search.value != ""){
-                url = `https://janas-api-server.azurewebsites.net/studygroups?ongoing=${ongoing.value}&sortBy=name:${sortBy.value}&search=${search.value}&limit=${4}&skip=${skip.value}`
-                console.log(url)  
+            else if (search.value != "") {
+                url = `https://janas-api-server.azurewebsites.net/studygroups?ongoing=${ongoing.value}&search=${search.value}&limit=${4}`
+                console.log(url)
             }
-       }
-       else if(search.value != ""){
-            url = `https://janas-api-server.azurewebsites.net/studygroups?ongoing=${ongoing.value}&search=${search.value}&limit=${4}&skip=${skip.value}`
-            console.log(url)  
-        }
-        else url = `https://janas-api-server.azurewebsites.net/studygroups?ongoing=${ongoing.value}&limit=${4}&skip=${skip.value}`
-        console.log(url)
-    }
-
-    else if(sortBy.value == "asc" || sortBy.value == "desc"){
-        if(search.value == ""){
-            url = `https://janas-api-server.azurewebsites.net/studygroups?sortBy=name:${sortBy.value}&limit=${4}&skip=${skip.value}`
+            else url = `https://janas-api-server.azurewebsites.net/studygroups?ongoing=${ongoing.value}&limit=${4}`
             console.log(url)
         }
-        else url = `https://janas-api-server.azurewebsites.net/studygroups?sortBy=name:${sortBy.value}&search=${search.value}&limit=${4}&skip=${skip.value}`
+
+        else if (sortBy.value == "asc" || sortBy.value == "desc") {
+            if (search.value == "") {
+                url = `https://janas-api-server.azurewebsites.net/studygroups?sortBy=name:${sortBy.value}&limit=${4}`
+                console.log(url)
+            }
+            else url = `https://janas-api-server.azurewebsites.net/studygroups?sortBy=name:${sortBy.value}&search=${search.value}&limit=${4}`
             console.log(url)
+        }
+
+        else if (ongoing.value == "" && sortBy.value == "" && search.value != "") {
+            url = `https://janas-api-server.azurewebsites.net/studygroups?search=${search.value}&limit=${4}`
+            console.log(url)
+        }
     }
 
-    else if(ongoing.value == "" && sortBy.value == "" && search.value != ""){
-        url = `https://janas-api-server.azurewebsites.net/studygroups?search=${search.value}&limit=${4}&skip=${skip.value}`
+
+
+    else if (skip.value != "") {
+        if (ongoing.value == "true" || ongoing.value == "false") {
+            console.log("ongoing" + ongoing.value)
+            if (sortBy.value === "asc" || sortBy.value === "desc") {
+                url = `https://janas-api-server.azurewebsites.net/studygroups?ongoing=${ongoing.value}&sortBy=name:${sortBy.value}&limit=${5}&skip=${skip.value}`
+                console.log(url)
+                if (search.value != "") {
+                    url = `https://janas-api-server.azurewebsites.net/studygroups?ongoing=${ongoing.value}&sortBy=name:${sortBy.value}&search=${search.value}&limit=${4}&skip=${skip.value}`
+                    console.log(url)
+                }
+            }
+            else if (search.value != "") {
+                url = `https://janas-api-server.azurewebsites.net/studygroups?ongoing=${ongoing.value}&search=${search.value}&limit=${4}&skip=${skip.value}`
+                console.log(url)
+            }
+            else url = `https://janas-api-server.azurewebsites.net/studygroups?ongoing=${ongoing.value}&limit=${4}&skip=${skip.value}`
             console.log(url)
-        
-    }
-    else{
-        url = `https://janas-api-server.azurewebsites.net/studygroups?limit=${4}&skip=${skip.value}`
+        }
+
+        else if (sortBy.value == "asc" || sortBy.value == "desc") {
+            if (search.value == "") {
+                url = `https://janas-api-server.azurewebsites.net/studygroups?sortBy=name:${sortBy.value}&limit=${4}&skip=${skip.value}`
+                console.log(url)
+            }
+            else url = `https://janas-api-server.azurewebsites.net/studygroups?sortBy=name:${sortBy.value}&search=${search.value}&limit=${4}&skip=${skip.value}`
             console.log(url)
+        }
+
+        else if (ongoing.value == "" && sortBy.value == "" && search.value != "") {
+            url = `https://janas-api-server.azurewebsites.net/studygroups?search=${search.value}&limit=${4}&skip=${skip.value}`
+            console.log(url)
+
+        }
+        else {
+            url = `https://janas-api-server.azurewebsites.net/studygroups?limit=${4}&skip=${skip.value}`
+            console.log(url)
+        }
     }
-}
 
-function createTableWithInnerHTML(jsonObject) {
-    let tableHTML = '<table border="1"><tr>';
+    function createTableWithInnerHTML(jsonObject) {
+        let tableHTML = '<table border="1"><tr>';
 
-    Object.keys(jsonObject[0]).forEach(key => {
-        tableHTML += `<th>${key}</th>`;
-    });
-
-    tableHTML += '</tr>';
-
-    jsonObject.forEach(item => {
-        tableHTML += '<tr>';
-        Object.values(item).forEach(value => {
-            tableHTML += `<td>${value}</td>`;
+        Object.keys(jsonObject[0]).forEach(key => {
+            tableHTML += `<th>${key}</th>`;
         });
+
         tableHTML += '</tr>';
-    });
 
-    tableHTML += '</table>';
+        jsonObject.forEach(item => {
+            tableHTML += '<tr>';
+            Object.values(item).forEach(value => {
+                tableHTML += `<td>${value}</td>`;
+            });
+            tableHTML += '</tr>';
+        });
 
-    document.writeln(tableHTML);
-}
+        tableHTML += '</table>';
+        let space = document.querySelector("#searchPrint")
+        space.innerHTML = tableHTML;
+
+
+        //document.writeln(tableHTML);
+    }
 
 
     console.log("test2")
@@ -333,30 +335,260 @@ function createTableWithInnerHTML(jsonObject) {
         h1.innerHTML = "StudyGroups"
         let data = []
         data = await response.json()
-        
+
         console.log(data)
         let array = []
-        array = data 
+        array = data
         let newArray = array;
-        for(let i = 0; i < array.length; i++){  
-            console.log("array.owner: " + array[i].owner) 
+        for (let i = 0; i < array.length; i++) {
+            console.log("array.owner: " + array[i].owner)
+            console.log("array._id: " + array[i]._id)
             console.log("user: " + user)
             let user_id = JSON.parse(user)
             console.log("user_id: " + user_id)
             let realUserId = JSON.stringify(user_id._id);
             console.log("realUserId: " + realUserId)
-            if(JSON.stringify(array[i].owner) === realUserId){
+            if (JSON.stringify(array[i].owner) === realUserId) {
                 //newArray = array.map(v => ({...v, edit_option: document.innerHTML = "<button id = 'editBtn' >" + "Edit" + "</button>"}))
-                newArray[i].edit_option = "<button id = 'editBtn' >" + "Edit" + "</button>"
+                let j = JSON.stringify(i)
+                newArray[i].edit_option = `<button type = "button" class="editbtn" id = "${array[i]._id}"> Edit </button>`
+                console.log("i:" + i)
+                console.log("j:" + j)
 
             }
-            
+
         }
 
         const jsonObject = eval(newArray);
         createTableWithInnerHTML(jsonObject);
-    
+        document.getElementById("searchButton").onclick = function() {
+            document.getElementById("searchStudyGroup").style.display = 'none'
+
+        }
+
+        let button = document.getElementsByClassName("editbtn")
+        console.log(document.getElementsByClassName("editbtn"))
+        console.log("button: " + button)
+
+        Array.prototype.map.call(button, (b) => {
+            b.addEventListener("click", async function (ev) {
+                console.log("clicked")
+
+                const sgId = ev.currentTarget.id
+
+                const editModal = document.getElementById('editStudyGroupModule')
+                console.log(editModal)
+
+                let currentGroup;
+                    for (let i = 0; i < array.length; i++){
+                        if(sgId == array[i]._id){
+                            currentGroup = array[i]
+                            console.log(currentGroup)
+                        }
+                    }
+
+                
+                
+                document.getElementById("name0").placeholder = currentGroup.name ;
+                    console.log(document.getElementById("name0"))
+                    console.log("NAME: " + currentGroup.name)
+                    document.getElementById("is_public0").placeholder = currentGroup.is_public ;
+                    document.getElementById("max_participants0").placeholder = currentGroup.max_participants ;
+                    document.getElementById("start_date0").placeholder = currentGroup.start_date ;
+                    document.getElementById("end_date0").placeholder = currentGroup.end_date ;
+                    document.getElementById("day0").placeholder = currentGroup.day ;
+                    document.getElementById("time0").placeholder = currentGroup.time ;
+                    document.getElementById("location0").placeholder = currentGroup.location ;
+                    document.getElementById("description0").placeholder = currentGroup.description ;
+                    document.getElementById("school0").placeholder = currentGroup.school ;
+                    document.getElementById("course_number0").placeholder = currentGroup.course_number ;
+
+
+
+
+                b.onclick = function () {
+                    editModal.style.display = 'block';
+                }
+
+                const editBt = document.getElementById('editStudyGroupButton')
+                ///get the data from the modal here
+                console.log(editBt)
+                editBt.addEventListener('click', async () => {
+
+                    var modal = document.getElementById('meetingTimesModal0');
+
+                    let times = [];
+                    console.log("oni: " + times);
+                    document.querySelector("#sendMeetingTimes0").addEventListener('click', async function (event) {
+                        console.log("jana")
+                        let day = document.getElementById('day0').value;
+                        let time = document.getElementById('time0').value;
+                        let location = document.getElementById('location0').value;
+                        times.push({ day, time, location });
+                        console.log(times)
+                        document.querySelector('#day0').value = undefined;
+                        document.querySelector('#time0').value = undefined;
+                        document.querySelector('#location0').value = undefined;
+
+                    });
+
+                    console.log("POOKIE: " + array)
+
+                    let name = document.getElementById('name0').value;
+                    let is_public = document.getElementById('is_public0').value;
+                    let max_participants = document.getElementById('max_participants0').value;
+                    let start_date = document.getElementById('start_date0').value;
+                    let end_date = document.getElementById('end_date0').value;
+                    let day = document.getElementById('day0').value;
+                    let time = document.getElementById('time0').value;
+                    let location = document.getElementById('location0').value;
+                    let description = document.getElementById('description0').value;
+                    let school = document.getElementById('school0').value;
+                    let course_number = document.getElementById('course_number0').value;
+
+                    let currentGroup;
+                    for (let i = 0; i < array.length; i++){
+                        if(sgId == array[i]._id){
+                            currentGroup = array[i]
+                            console.log(currentGroup)
+                        }
+                    }
+
+                    document.getElementById("name0").placeholder = name ;
+                    console.log(document.getElementById("name0"))
+                    console.log("NAME: " + name)
+
+
+                    if( name == ""){
+                        name = currentGroup.name;
+                    }
+
+                    if( is_public == ""){
+                        is_public = currentGroup.is_public;
+                    }
+
+                    if( max_participants == ""){
+                        max_participants = currentGroup.max_participants;
+                    }
+                    if( start_date == ""){
+                        start_date = currentGroup.start_date;
+                    }
+                    if( end_date == ""){
+                        end_date = currentGroup.end_date;
+                    }
+                    if( day == ""){
+                        day = currentGroup.day;
+                    }
+                    if( time == ""){
+                        time = currentGroup.time;
+                    }
+                    if( location == ""){
+                        location = currentGroup.location;
+                    }
+                    if( description == ""){
+                        description = currentGroup.description;
+                    }
+                    if( school == ""){
+                        school = currentGroup.school;
+                    }
+                    if( course_number == ""){
+                        course_number = currentGroup.course_number;
+                    }
+
+
+                    if (start_date == false) {
+                        start_date = undefined;
+                    }
+
+                    if (end_date == false) {
+                        end_date = undefined;
+                    }
+
+                    
+                    
+
+                    const editstudyGroupData = {
+                        name: name,
+                        is_public: is_public,
+                        max_participants: max_participants,
+                        start_date: start_date,
+                        end_date: end_date,
+                        meeting_times: times,
+                        description: description,
+                        school: school,
+                        course_number: course_number,
+
+                    };
+                    let editStudyGroup;
+                    if (time == false || day == false || location == false) {
+                        const editstudyGroupData2 = {
+                            name: name,
+                            is_public: is_public,
+                            max_participants: max_participants,
+                            start_date: start_date,
+                            end_date: end_date,
+                            description: description,
+                            school: school,
+                            course_number: course_number,
+                        };
+                        editStudyGroup = editstudyGroupData2;
+                    }
+
+                    else {
+                        editStudyGroup = editstudyGroupData;
+                    }
+
+
+                    const mssg = document.querySelector("p");
+                    const url = `https://janas-api-server.azurewebsites.net/studygroup/${sgId}`;
+                    const token = localStorage.getItem("token");
+                    console.log('test3')
+                    console.log("Shiko: " + JSON.stringify(editstudyGroupData))
+                    try {
+                        const response = await fetch(url, {
+                            method: "PATCH",
+                            headers: {
+                                "Authorization": `Bearer ${token}`,
+                                "Content-Type": "application/json"
+                            },
+                            body: JSON.stringify(editstudyGroupData)
+                        });
+                        console.log("test4")
+                        if (response.ok) {
+                            console.log('test5')
+                            try {
+                                const data = await response.json();
+                                console.log(data)
+                                mssg.innerHTML = data.message;
+                                message.textContent = 'Study group has been successfully edited'
+                                message.style.color = 'green';
+                                document.getElementById("editStudyGroupButton").onclick = function(){
+                                    document.getElementById("editStudyGroupModule").style.display = 'none'
+                                }
+                            } catch (error) {
+                                //  console.error('Error parsing JSON response:', error.message);
+                                // Ignore error parsing JSON
+                                mssg.style.color = 'green';
+                                location.href = "main.html";
+                            }
+                        } else {
+                            const errorData = await response.json();
+                            mssg.innerHTML = "Error: " + errorData.message;
+                            mssg.style.color = 'red';
+                        }
+                    } catch (error) {
+                        //console.error('Error:', error.message);
+                        mssg.innerHTML = "Error: " + error.message;
+                        mssg.style.color = 'red';
+                    }
+
+                });
+
+
+            });
+        })
     }
+
     else {
         h1.innerHTML = "Something went wrong."
         p.innerHTML = "Please try again!"
@@ -364,11 +596,3 @@ function createTableWithInnerHTML(jsonObject) {
         console.log("Error ")
     }
 })
-
-
-document.querySelector('#editBtn').addEventListener('click', async () =>{
-    console.log("POOKIE")
-})
-
-
-

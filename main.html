@@ -74,63 +74,137 @@
 
 
 
-        <label for="description"><b>Description</b></label>
-        <input type="text" placeholder="Enter the group description" name="description" id="description">
+          <label for="description"><b>Description</b></label>
+          <input type="text" placeholder="Enter the group description" name="description" id="description">
 
-        <label for="school"><b>School</b></label>
-        <input type="text" placeholder="Enter the school" name="school" id="school">
+          <label for="school"><b>School</b></label>
+          <input type="text" placeholder="Enter the school" name="school" id="school">
 
-        <label for="course_number"><b>Course Number</b></label>
-        <input type="text" placeholder="Enter the course_number" name="course_number" id="course_number">
+          <label for="course_number"><b>Course Number</b></label>
+          <input type="text" placeholder="Enter the course_number" name="course_number" id="course_number">
 
-        <label for="participants"><b>Participants</b></label>
-        <input type="text" placeholder="Enter the particiapnts" name="participants" id="participants">
-
-        <div class="clearfix">
-          <button type="button" onclick="document.getElementById('createStudyGroupModule').style.display='none'"
-            class="cancelbtn">Cancel</button>
-          <button type="button" class="signupbtn" id="createStudyGroupButton">Create Study group</button>
-        </div>
-    </div>
-    </form>
-  </div>
-  </div>
-  </div>
-
-
-  <button onclick="document.getElementById('searchStudyGroup').style.display='block'" style="width:auto;">Search For Study Group</button>
-    <div id="searchStudyGroup" class="modal">
-      <span onclick="document.getElementById('searchStudyGroup').style.display='none'" class="close"
-        title="Close Modal">&times;</span>
-      <form method="get" class="modal-content" id="searchFormData">
-        <div class="container">
-          <h1>Search Study Group</h1>
-          <hr>
-          <label for="ongoing"><b>I am looking for ongoing study groups</b></label>
-          <input placeholder="Enter true/false" type="boolean" id="ongoing" name="ongoing">
-          
-          <label for="sortBy"><b>Sorting type</b></label>
-          <input placeholder="Enter asc/desc" type="text" id="sortBy" name="sortBy">
-          
-          <label for="search"><b>Search</b></label>
-          <input type="text" placeholder="Enter study group name/description" name="search" id="search">
-
-          <label for="skip"><b>Skip value</b></label>
-          <input placeholder="Enter # value" type="text" id="skip" name="skip">
+          <label for="participants"><b>Participants</b></label>
+          <input type="text" placeholder="Enter the particiapnts" name="participants" id="participants">
 
           <div class="clearfix">
-            <button type="button" onclick="document.getElementById('searchStudyGroup').style.display='none'"
+            <button type="button" onclick="document.getElementById('createStudyGroupModule').style.display='none'"
               class="cancelbtn">Cancel</button>
-            <button type="button" class="searchbtn" id="searchButton">Search</button>
+            <button type="button" class="signupbtn" id="createStudyGroupButton">Create Study group</button>
           </div>
         </div>
       </form>
     </div>
+  </div>
 
-    <div id="searchPrint">
+  <button onclick="document.getElementById('searchStudyGroup').style.display='block'" style="width:auto;">Search For
+    Study Group</button>
+  <div id="searchStudyGroup" class="modal">
+    <span onclick="document.getElementById('searchStudyGroup').style.display='none'" class="close"
+      title="Close Modal">&times;</span>
+    <form method="get" class="modal-content" id="searchFormData">
+      <div class="container">
+        <h1>Search Study Group</h1>
+        <hr>
+        <label for="ongoing"><b>I am looking for ongoing study groups</b></label>
+        <input placeholder="Enter true/false" type="boolean" id="ongoing" name="ongoing">
 
-    </div>
+        <label for="sortBy"><b>Sorting type</b></label>
+        <input placeholder="Enter asc/desc" type="text" id="sortBy" name="sortBy">
 
+        <label for="search"><b>Search</b></label>
+        <input type="text" placeholder="Enter study group name/description" name="search" id="search">
+
+        <label for="skip"><b>Skip value</b></label>
+        <input placeholder="Enter # value" type="text" id="skip" name="skip">
+
+        <div class="clearfix">
+          <button type="button" onclick="document.getElementById('searchStudyGroup').style.display='none'"
+            class="cancelbtn">Cancel</button>
+          <button type="button" class="searchbtn" id="searchButton">Search</button>
+        </div>
+      </div>
+    </form>
+  </div>
+
+
+
+
+
+  <div id="editStudyGroupModule" class="modal">
+    <span onclick="document.getElementById('editStudyGroupModule').style.display='none'" class="close"
+      title="Close Modal">&times;</span>
+    <form method="patch" class="modal-content" id="editStudyGroupData">
+      <div class="container">
+        <h1>Edit Study Group</h1>
+        <hr>
+        <label for="name"><b>Study Group Name</b></label>
+        <input type="text"  name="name" id="name0">
+
+        <label for="is_public"><b>Public/Private</b></label>
+        <input type="boolean" placeholder="Enter true/false for new public prefernce" name="is_public" id="is_public0">
+
+        <label for="max_participants"><b>Maximum number of participants</b></label>
+        <input type="integer" placeholder="Enter the maximum number of participants" name="max_participants"
+          id="max_participants0">
+
+        <label for="start_date"><b>Start Date (YYYY-MM-DD)</b></label>
+        <input type="text" placeholder="Enter the start date" name="start_date" id="start_date0">
+
+        <label for="end_date"><b>End Date (YYYY-MM-DD)</b></label>
+        <input type="text" placeholder="Enter the end date" name="end_date" id="end_date0">
+
+        <label for="meeting_times"><b>Meeting Times</b></label>
+
+        <button onclick="document.getElementById('meetingTimesModal0').style.display='block'" style="width:auto;">Add
+          Meeting Times</button>
+        <div id="meetingTimesModal0" class="modal">
+          <span onclick="document.getElementById('meetingTimesModal0').style.display='none'" class="close"
+            title="Close Modal">&times;</span>
+          <form method="post" class="modal-content" id="meetingTimesData0">
+            <div class="container">
+              <h1>Meeting Times</h1>
+              <hr>
+              <label for="day"><b>Day</b></label>
+              <input type="text" placeholder="Enter the day" name="day" id="day0" required>
+
+              <label for="time"><b>Time (Ex: 15:30)</b></label>
+              <input type="text" placeholder="Enter the time" name="time" id="time0" required>
+
+              <label for="location"><b>Location</b></label>
+              <input type="text" placeholder="Enter the location" name="location" id="location0" required>
+
+              <div class="clearfix">
+                <button type="button" onclick="document.getElementById('meetingTimesModal0').style.display='none'"
+                  class="cancelbtn">Cancel</button>
+                <button type="button" onclick="document.getElementById('meetingTimesModal0').style.display='none'" class="signupbtn" id="sendMeetingTimes0">Send Meeting Time</button>
+              </div>
+            </div>
+          </form>
+        </div>
+        <hr>
+
+        <label for="description"><b>Description</b></label>
+        <input type="text" placeholder="Enter the group description" name="description" id="description0">
+
+        <label for="school"><b>School</b></label>
+        <input type="text" placeholder="Enter the school" name="school" id="school0">
+
+        <label for="course_number"><b>Course Number</b></label>
+        <input type="text" placeholder="Enter the course_number" name="course_number" id="course_number0">
+
+        <div class="clearfix">
+          <button type="button" onclick="document.getElementById('editStudyGroupModule').style.display='none'"
+            class="cancelbtn">Cancel</button>
+          <button type="button" class="signupbtn" id="editStudyGroupButton"> Edit Study group</button>
+        </div>
+      </div>
+    </form>
+  </div>
+
+
+
+  <div id="searchPrint">
+  </div>
 
 
 
