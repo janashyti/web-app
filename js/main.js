@@ -63,9 +63,9 @@ document.querySelector("#sendMeetingTimes").addEventListener('click', async func
     let location = document.getElementById('location').value;
     times.push({ day, time, location });
     console.log(times)
-    document.querySelector('#day').value = "";
-    document.querySelector('#time').value = "";
-    document.querySelector('#location').value = "";
+    document.querySelector('#day').value = undefined;
+    document.querySelector('#time').value = undefined;
+    document.querySelector('#location').value = undefined;
 
 });
 
@@ -96,7 +96,9 @@ document.querySelector("#createStudyGroupButton").addEventListener('click', asyn
     if (end_date == false) {
         end_date = undefined;
     }
- 
+
+    //const isTrue = (time) ? true : false
+    //console.log(`***${time}*** isTrue: ${isTrue}`) 
 
 
 
@@ -114,7 +116,7 @@ document.querySelector("#createStudyGroupButton").addEventListener('click', asyn
         participants: [participants]
     };
 
-    if (times.length != 0) {
+    if (time == false || day == false || location == false) {
         const studyGroupData2 = {
             name: name,
             owner: owner,
@@ -513,6 +515,7 @@ document.querySelector("#searchButton").addEventListener('click', async () => {
                         end_date = undefined;
                     }
 
+                    let dita = document.getElementById("day0").value
 
                     const editstudyGroupData = {
                         name: name,
@@ -526,8 +529,10 @@ document.querySelector("#searchButton").addEventListener('click', async () => {
                         course_number: course_number,
 
                     };
+                    console.log("DAY" + dita)
                     let editStudyGroup;
-                    if (times.length == 0) {
+                    console.log(dita.value)
+                    if (dita.value == "") {
                         const editstudyGroupData2 = {
                             name: name,
                             is_public: is_public,
