@@ -63,9 +63,9 @@ document.querySelector("#sendMeetingTimes").addEventListener('click', async func
     let location = document.getElementById('location').value;
     times.push({ day, time, location });
     console.log(times)
-    document.querySelector('#day').value = undefined;
-    document.querySelector('#time').value = undefined;
-    document.querySelector('#location').value = undefined;
+    document.querySelector('#day').value = "";
+    document.querySelector('#time').value = "";
+    document.querySelector('#location').value = "";
 
 });
 
@@ -96,9 +96,7 @@ document.querySelector("#createStudyGroupButton").addEventListener('click', asyn
     if (end_date == false) {
         end_date = undefined;
     }
-
-    //const isTrue = (time) ? true : false
-    //console.log(`***${time}*** isTrue: ${isTrue}`) 
+ 
 
 
 
@@ -116,7 +114,7 @@ document.querySelector("#createStudyGroupButton").addEventListener('click', asyn
         participants: [participants]
     };
 
-    if (time == false || day == false || location == false) {
+    if (times.length != 0) {
         const studyGroupData2 = {
             name: name,
             owner: owner,
@@ -187,6 +185,8 @@ document.querySelector("#searchButton").addEventListener('click', async () => {
     let url = `https://janas-api-server.azurewebsites.net/studygroups?`
     console.log(url)
 
+    const owned = document.querySelector("#owned")
+    console.log("OWned " + owned.value)
     const ongoing = document.querySelector("#ongoing")
     console.log(ongoing.value)
     const sortBy = document.querySelector("#sortBy")
@@ -294,18 +294,36 @@ document.querySelector("#searchButton").addEventListener('click', async () => {
         }
     }
 
-    function createTableWithInnerHTML(jsonObject) {
+    function createTableWithInnerHTML(finalArray) {
+        console.log(finalArray)
+        for (let i = 0; i < finalArray.length; i++) {
+            let vali = []
+            vali[i] = finalArray[i].meeting_times
+            console.log(vali[i])
+            for (let j = 0; j <= finalArray.length; j++) {
+                let valo = []
+                valo = vali[i]
+                valo[j] = JSON.stringify(valo[j])
+                console.log(valo[j])
+                vali[i] = valo
+                console.log(vali[i])
+                console.log("VAlO j: " + j + valo[j])
+                finalArray[i].meeting_times = vali[i]
+                console.log(finalArray[i])
+            }
+            //finalArray[i].meeting_times = vali[i]
+        }
         let tableHTML = '<table border="1"><tr>';
-
-        Object.keys(jsonObject[0]).forEach(key => {
+        Object.keys(finalArray[0]).forEach(key => {
             tableHTML += `<th>${key}</th>`;
         });
 
         tableHTML += '</tr>';
 
-        jsonObject.forEach(item => {
+        finalArray.forEach(item => {
             tableHTML += '<tr>';
             Object.values(item).forEach(value => {
+
                 tableHTML += `<td>${value}</td>`;
             });
             tableHTML += '</tr>';
@@ -340,97 +358,101 @@ document.querySelector("#searchButton").addEventListener('click', async () => {
         let array = []
         array = data
         let newArray = array;
+        let ownedArray = [];
         for (let i = 0; i < array.length; i++) {
-            console.log("array.owner: " + array[i].owner)
-            console.log("array._id: " + array[i]._id)
-            console.log("user: " + user)
             let user_id = JSON.parse(user)
-            console.log("user_id: " + user_id)
+            // console.log("user_id: " + user_id)
             let realUserId = JSON.stringify(user_id._id);
-            console.log("realUserId: " + realUserId)
+            // console.log("realUserId: " + realUserId)
             if (JSON.stringify(array[i].owner) === realUserId) {
                 //newArray = array.map(v => ({...v, edit_option: document.innerHTML = "<button id = 'editBtn' >" + "Edit" + "</button>"}))
-                let j = JSON.stringify(i)
                 newArray[i].edit_option = `<button type = "button" class="editbtn" id = "${array[i]._id}"> Edit </button>`
-                console.log("i:" + i)
-                console.log("j:" + j)
-
+                ownedArray[i] = array[i]
             }
 
         }
+        let finalArray = [];
 
-        const jsonObject = eval(newArray);
-        createTableWithInnerHTML(jsonObject);
-        document.getElementById("searchButton").onclick = function() {
-            document.getElementById("searchStudyGroup").style.display = 'none'
-
+        if (owned.value == "true") {
+            for (let i = 0; i < ownedArray.length; i++) {
+                finalArray[i] = ownedArray[i]
+            }
         }
+        else if (owned.value == "false" || owned.value == "") {
+            for (let i = 0; i < newArray.length; i++) {
+                finalArray[i] = newArray[i]
+            }
+        }
+        console.log(finalArray)
+
+        createTableWithInnerHTML(finalArray);
+
+
+        document.getElementById("searchStudyGroup").style.display = 'none'
 
         let button = document.getElementsByClassName("editbtn")
         console.log(document.getElementsByClassName("editbtn"))
-        console.log("button: " + button)
+        console.log("button: " + JSON.stringify(finalArray.edit_option))
 
-        Array.prototype.map.call(button, (b) => {
+        finalArray.map.call(button, (b) => {
             b.addEventListener("click", async function (ev) {
                 console.log("clicked")
 
-                const sgId = ev.currentTarget.id
-
                 const editModal = document.getElementById('editStudyGroupModule')
                 console.log(editModal)
+                editModal.style.display = 'block';
+
+
+
+                const sgId = ev.currentTarget.id
 
                 let currentGroup;
-                    for (let i = 0; i < array.length; i++){
-                        if(sgId == array[i]._id){
-                            currentGroup = array[i]
-                            console.log(currentGroup)
-                        }
+                for (let i = 0; i < array.length; i++) {
+                    if (sgId == array[i]._id) {
+                        currentGroup = array[i]
+                        console.log(currentGroup)
                     }
-
-                
-                
-                document.getElementById("name0").placeholder = currentGroup.name ;
-                    console.log(document.getElementById("name0"))
-                    console.log("NAME: " + currentGroup.name)
-                    document.getElementById("is_public0").placeholder = currentGroup.is_public ;
-                    document.getElementById("max_participants0").placeholder = currentGroup.max_participants ;
-                    document.getElementById("start_date0").placeholder = currentGroup.start_date ;
-                    document.getElementById("end_date0").placeholder = currentGroup.end_date ;
-                    document.getElementById("day0").placeholder = currentGroup.day ;
-                    document.getElementById("time0").placeholder = currentGroup.time ;
-                    document.getElementById("location0").placeholder = currentGroup.location ;
-                    document.getElementById("description0").placeholder = currentGroup.description ;
-                    document.getElementById("school0").placeholder = currentGroup.school ;
-                    document.getElementById("course_number0").placeholder = currentGroup.course_number ;
-
-
-
-
-                b.onclick = function () {
-                    editModal.style.display = 'block';
                 }
+
+                document.getElementById("name0").placeholder = currentGroup.name;
+                console.log(document.getElementById("name0"))
+                console.log("NAME: " + currentGroup.name)
+                document.getElementById("is_public0").placeholder = currentGroup.is_public;
+                document.getElementById("max_participants0").placeholder = currentGroup.max_participants;
+                document.getElementById("start_date0").placeholder = currentGroup.start_date;
+                document.getElementById("end_date0").placeholder = currentGroup.end_date;
+                document.getElementById("day0").placeholder = currentGroup.day;
+                document.getElementById("time0").placeholder = currentGroup.time;
+                document.getElementById("location0").placeholder = currentGroup.location;
+                document.getElementById("description0").placeholder = currentGroup.description;
+                document.getElementById("school0").placeholder = currentGroup.school;
+                document.getElementById("course_number0").placeholder = currentGroup.course_number;
+
+
+                let times = [];
+                console.log("oni: " + times);
+                const editMeetingTimesBtn = document.querySelector("#sendMeetingTimes0")
+                console.log(editMeetingTimesBtn)
+                document.querySelector("#sendMeetingTimes0").addEventListener('click', async function (event) {
+                    console.log("jana")
+                    let day = document.getElementById('day0').value;
+                    let time = document.getElementById('time0').value;
+                    let location = document.getElementById('location0').value;
+                    times.push({ day, time, location });
+                    console.log(times)
+                    console.log("TEST")
+                    document.querySelector('#day0').value = "";
+                    document.querySelector('#time0').value = "";
+                    document.querySelector('#location0').value = "";
+
+                });
+
+
 
                 const editBt = document.getElementById('editStudyGroupButton')
                 ///get the data from the modal here
                 console.log(editBt)
                 editBt.addEventListener('click', async () => {
-
-                    var modal = document.getElementById('meetingTimesModal0');
-
-                    let times = [];
-                    console.log("oni: " + times);
-                    document.querySelector("#sendMeetingTimes0").addEventListener('click', async function (event) {
-                        console.log("jana")
-                        let day = document.getElementById('day0').value;
-                        let time = document.getElementById('time0').value;
-                        let location = document.getElementById('location0').value;
-                        times.push({ day, time, location });
-                        console.log(times)
-                        document.querySelector('#day0').value = undefined;
-                        document.querySelector('#time0').value = undefined;
-                        document.querySelector('#location0').value = undefined;
-
-                    });
 
                     console.log("POOKIE: " + array)
 
@@ -439,73 +461,58 @@ document.querySelector("#searchButton").addEventListener('click', async () => {
                     let max_participants = document.getElementById('max_participants0').value;
                     let start_date = document.getElementById('start_date0').value;
                     let end_date = document.getElementById('end_date0').value;
-                    let day = document.getElementById('day0').value;
-                    let time = document.getElementById('time0').value;
-                    let location = document.getElementById('location0').value;
                     let description = document.getElementById('description0').value;
                     let school = document.getElementById('school0').value;
                     let course_number = document.getElementById('course_number0').value;
 
+                    console.log(day)
+
                     let currentGroup;
-                    for (let i = 0; i < array.length; i++){
-                        if(sgId == array[i]._id){
+                    for (let i = 0; i < array.length; i++) {
+                        if (sgId == array[i]._id) {
                             currentGroup = array[i]
                             console.log(currentGroup)
                         }
                     }
 
-                    document.getElementById("name0").placeholder = name ;
+                    document.getElementById("name0").placeholder = name;
                     console.log(document.getElementById("name0"))
                     console.log("NAME: " + name)
 
 
-                    if( name == ""){
+                    if (name == "") {
                         name = currentGroup.name;
                     }
 
-                    if( is_public == ""){
+                    if (is_public == "") {
                         is_public = currentGroup.is_public;
                     }
 
-                    if( max_participants == ""){
+                    if (max_participants == "") {
                         max_participants = currentGroup.max_participants;
                     }
-                    if( start_date == ""){
+                    if (start_date == "") {
                         start_date = currentGroup.start_date;
                     }
-                    if( end_date == ""){
+                    if (end_date == "") {
                         end_date = currentGroup.end_date;
                     }
-                    if( day == ""){
-                        day = currentGroup.day;
-                    }
-                    if( time == ""){
-                        time = currentGroup.time;
-                    }
-                    if( location == ""){
-                        location = currentGroup.location;
-                    }
-                    if( description == ""){
+                    if (description == "") {
                         description = currentGroup.description;
                     }
-                    if( school == ""){
+                    if (school == "") {
                         school = currentGroup.school;
                     }
-                    if( course_number == ""){
+                    if (course_number == "") {
                         course_number = currentGroup.course_number;
                     }
-
-
                     if (start_date == false) {
                         start_date = undefined;
                     }
-
                     if (end_date == false) {
                         end_date = undefined;
                     }
 
-                    
-                    
 
                     const editstudyGroupData = {
                         name: name,
@@ -520,7 +527,7 @@ document.querySelector("#searchButton").addEventListener('click', async () => {
 
                     };
                     let editStudyGroup;
-                    if (time == false || day == false || location == false) {
+                    if (times.length == 0) {
                         const editstudyGroupData2 = {
                             name: name,
                             is_public: is_public,
@@ -543,7 +550,8 @@ document.querySelector("#searchButton").addEventListener('click', async () => {
                     const url = `https://janas-api-server.azurewebsites.net/studygroup/${sgId}`;
                     const token = localStorage.getItem("token");
                     console.log('test3')
-                    console.log("Shiko: " + JSON.stringify(editstudyGroupData))
+                    body: JSON.stringify(editStudyGroup)
+                    console.log("Shiko: " + JSON.stringify(editStudyGroup))
                     try {
                         const response = await fetch(url, {
                             method: "PATCH",
@@ -551,7 +559,7 @@ document.querySelector("#searchButton").addEventListener('click', async () => {
                                 "Authorization": `Bearer ${token}`,
                                 "Content-Type": "application/json"
                             },
-                            body: JSON.stringify(editstudyGroupData)
+                            body: JSON.stringify(editStudyGroup)
                         });
                         console.log("test4")
                         if (response.ok) {
@@ -559,15 +567,10 @@ document.querySelector("#searchButton").addEventListener('click', async () => {
                             try {
                                 const data = await response.json();
                                 console.log(data)
-                                mssg.innerHTML = data.message;
-                                message.textContent = 'Study group has been successfully edited'
-                                message.style.color = 'green';
-                                document.getElementById("editStudyGroupButton").onclick = function(){
-                                    document.getElementById("editStudyGroupModule").style.display = 'none'
-                                }
+                                document.getElementById("editStudyGroupModule").style.display = 'none'
+                                location.reload()
+
                             } catch (error) {
-                                //  console.error('Error parsing JSON response:', error.message);
-                                // Ignore error parsing JSON
                                 mssg.style.color = 'green';
                                 location.href = "main.html";
                             }
@@ -577,7 +580,6 @@ document.querySelector("#searchButton").addEventListener('click', async () => {
                             mssg.style.color = 'red';
                         }
                     } catch (error) {
-                        //console.error('Error:', error.message);
                         mssg.innerHTML = "Error: " + error.message;
                         mssg.style.color = 'red';
                     }
