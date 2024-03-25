@@ -295,7 +295,7 @@ document.querySelector("#searchButton").addEventListener('click', async () => {
             console.log(url)
         }
     }
-       
+
 
 
     console.log("test2")
@@ -323,7 +323,8 @@ document.querySelector("#searchButton").addEventListener('click', async () => {
             let user_id = JSON.parse(user)
             // console.log("user_id: " + user_id)
             let realUserId = JSON.stringify(user_id._id);
-            // console.log("realUserId: " + realUserId)
+
+            newArray[i].view_meetingTimes = `<button type = "button" class="meetingbtn" id = "${array[i]._id}"> View Meeting Times </button>`
             if (JSON.stringify(array[i].owner) === realUserId) {
                 //newArray = array.map(v => ({...v, edit_option: document.innerHTML = "<button id = 'editBtn' >" + "Edit" + "</button>"}))
                 newArray[i].edit_option = `<button type = "button" class="editbtn" id = "${array[i]._id}"> Edit </button>`
@@ -371,15 +372,15 @@ document.querySelector("#searchButton").addEventListener('click', async () => {
                 tableHTML += `<th>${key}</th>`;
                 console.log(key)
             });
-    
+
             tableHTML += '</tr>';
-    
+
             finalArray.forEach(item => {
                 tableHTML += '<tr>';
                 Object.values(item).forEach(value => {
-    
+
                     tableHTML += `<td>${value}</td>`;
-                    
+
                 });
                 tableHTML += '</tr>';
             });
@@ -387,7 +388,7 @@ document.querySelector("#searchButton").addEventListener('click', async () => {
             let space = document.querySelector("#searchPrint")
             space.innerHTML = tableHTML;
         }
-    
+
 
         console.log(finalArray[0].meeting_times)
         console.log(finalTimesArray[0].meeting_times)
@@ -400,8 +401,36 @@ document.querySelector("#searchButton").addEventListener('click', async () => {
         document.getElementById("searchStudyGroup").style.display = 'none'
 
         let button = document.getElementsByClassName("editbtn")
-        //console.log(document.getElementsByClassName("editbtn"))
-        //console.log("button: " + JSON.stringify(finalArray.edit_option))
+        let button2 = document.getElementsByClassName("meetingbtn")
+
+        finalArray.map.call(button2, (b) => {
+            b.addEventListener("click", async function (ev) {
+                const sgId2 = ev.currentTarget.id
+                console.log(sgId2)
+                
+
+                for (let i = 0; i < finalArray.length; i++) {
+                    let vali = []
+                    vali[i] = finalArray[i].meeting_times
+                    console.log(vali[i])
+                    for (let j = 0; j <= finalArray.length; j++) {
+                        let valo = []
+                        valo = vali[i]
+                        valo[j] = JSON.stringify(valo[j])
+                        vali[i] = valo
+                        finalArray[i].meeting_times = vali[i]
+                    }
+                    finalArray[i].meeting_times = vali[i]
+                    console.log(sgId2)
+                    console.log(finalArray[i]._id)
+                    if (finalArray[i]._id == sgId2) {
+                        document.write(finalArray[i].meeting_times)
+                    }
+                }
+                //document.write()
+
+            })
+        })
 
         finalArray.map.call(button, (b) => {
             b.addEventListener("click", async function (ev) {
