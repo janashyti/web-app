@@ -295,49 +295,7 @@ document.querySelector("#searchButton").addEventListener('click', async () => {
             console.log(url)
         }
     }
-
-    function createTableWithInnerHTML(finalArray) {
-        console.log(finalArray)
-        for (let i = 0; i < finalArray.length; i++) {
-            let vali = []
-            vali[i] = finalArray[i].meeting_times
-            console.log(vali[i])
-            for (let j = 0; j <= finalArray.length; j++) {
-                let valo = []
-                valo = vali[i]
-                valo[j] = JSON.stringify(valo[j])
-                console.log(valo[j])
-                vali[i] = valo
-                console.log(vali[i])
-                console.log("VAlO j: " + j + valo[j])
-                finalArray[i].meeting_times = vali[i]
-                console.log(finalArray[i])
-            }
-            //finalArray[i].meeting_times = vali[i]
-        }
-        let tableHTML = '<table border="1"><tr>';
-        Object.keys(finalArray[0]).forEach(key => {
-            tableHTML += `<th>${key}</th>`;
-        });
-
-        tableHTML += '</tr>';
-
-        finalArray.forEach(item => {
-            tableHTML += '<tr>';
-            Object.values(item).forEach(value => {
-
-                tableHTML += `<td>${value}</td>`;
-            });
-            tableHTML += '</tr>';
-        });
-
-        tableHTML += '</table>';
-        let space = document.querySelector("#searchPrint")
-        space.innerHTML = tableHTML;
-
-
-        //document.writeln(tableHTML);
-    }
+       
 
 
     console.log("test2")
@@ -374,27 +332,76 @@ document.querySelector("#searchButton").addEventListener('click', async () => {
 
         }
         let finalArray = [];
+        let finalTimesArray = []
 
         if (owned.value == "true") {
             for (let i = 0; i < ownedArray.length; i++) {
                 finalArray[i] = ownedArray[i]
+                finalTimesArray[i] = ownedArray[i]
             }
         }
         else if (owned.value == "false" || owned.value == "") {
             for (let i = 0; i < newArray.length; i++) {
                 finalArray[i] = newArray[i]
+                finalTimesArray[i] = newArray[i]
             }
         }
         console.log(finalArray)
+        console.log(finalTimesArray)
 
         createTableWithInnerHTML(finalArray);
+
+        function createTableWithInnerHTML(finalArray) {
+            console.log(finalArray)
+            for (let i = 0; i < finalArray.length; i++) {
+                let vali = []
+                vali[i] = finalArray[i].meeting_times
+                console.log(vali[i])
+                for (let j = 0; j <= finalArray.length; j++) {
+                    let valo = []
+                    valo = vali[i]
+                    // valo[j] = JSON.stringify(valo[j])
+                    vali[i] = valo
+                    finalArray[i].meeting_times = vali[i]
+                }
+                finalArray[i].meeting_times = vali[i]
+            }
+            let tableHTML = '<table border="1"><tr>';
+            Object.keys(finalArray[0]).forEach(key => {
+                tableHTML += `<th>${key}</th>`;
+                console.log(key)
+            });
+    
+            tableHTML += '</tr>';
+    
+            finalArray.forEach(item => {
+                tableHTML += '<tr>';
+                Object.values(item).forEach(value => {
+    
+                    tableHTML += `<td>${value}</td>`;
+                    
+                });
+                tableHTML += '</tr>';
+            });
+            tableHTML += '</table>';
+            let space = document.querySelector("#searchPrint")
+            space.innerHTML = tableHTML;
+        }
+    
+
+        console.log(finalArray[0].meeting_times)
+        console.log(finalTimesArray[0].meeting_times)
+        console.log(array[0].meeting_times)
+        console.log(newArray[0].meeting_times)
+        console.log(data[0].meeting_times)
+
 
 
         document.getElementById("searchStudyGroup").style.display = 'none'
 
         let button = document.getElementsByClassName("editbtn")
-        console.log(document.getElementsByClassName("editbtn"))
-        console.log("button: " + JSON.stringify(finalArray.edit_option))
+        //console.log(document.getElementsByClassName("editbtn"))
+        //console.log("button: " + JSON.stringify(finalArray.edit_option))
 
         finalArray.map.call(button, (b) => {
             b.addEventListener("click", async function (ev) {
@@ -409,10 +416,73 @@ document.querySelector("#searchButton").addEventListener('click', async () => {
                 const sgId = ev.currentTarget.id
 
                 let currentGroup;
+                let currentTimesGroup;
                 for (let i = 0; i < array.length; i++) {
                     if (sgId == array[i]._id) {
                         currentGroup = array[i]
-                        console.log(currentGroup)
+                    }
+                }
+
+                for (let i = 0; i < finalTimesArray.length; i++) {
+                    if (sgId == finalTimesArray[i]._id) {
+                        currentTimesGroup = finalTimesArray[i]
+                    }
+                }
+
+                let timesArray = []
+                timesArray = currentTimesGroup.meeting_times
+                console.log(currentTimesGroup)
+                console.log(timesArray)
+                for (let j = 0; j <= timesArray.length; j) {
+                    console.log(timesArray[j])
+                    if (timesArray[j] != undefined) {
+                        document.getElementById("day1").value = timesArray[j].day;
+                        document.getElementById("time1").value = timesArray[j].time;
+                        document.getElementById("location1").value = timesArray[j].location;
+                    }
+
+                    j++
+                    console.log(timesArray[j])
+                    if (timesArray[j] != undefined) {
+                        document.getElementById("day2").value = timesArray[j].day;
+                        document.getElementById("time2").value = timesArray[j].time;
+                        document.getElementById("location2").value = timesArray[j].location;
+                    }
+
+                    j++
+                    console.log(timesArray[j])
+                    if (timesArray[j] != undefined) {
+                        document.getElementById("day3").value = timesArray[j].day;
+                        document.getElementById("time3").value = timesArray[j].time;
+                        document.getElementById("location3").value = timesArray[j].location;
+                    }
+                    j++
+                    console.log(timesArray[j])
+                    if (timesArray[j] != undefined) {
+                        document.getElementById("day4").value = timesArray[j].day;
+                        document.getElementById("time4").value = timesArray[j].time;
+                        document.getElementById("location4").value = timesArray[j].location;
+                    }
+                    j++
+                    console.log(timesArray[j])
+                    if (timesArray[j] != undefined) {
+                        document.getElementById("day5").value = timesArray[j].day;
+                        document.getElementById("time5").value = timesArray[j].time;
+                        document.getElementById("location5").value = timesArray[j].location;
+                    }
+                    j++
+                    console.log(timesArray[j])
+                    if (timesArray[j] != undefined) {
+                        document.getElementById("day6").value = timesArray[j].day;
+                        document.getElementById("time6").value = timesArray[j].time;
+                        document.getElementById("location6").value = timesArray[j].location;
+                    }
+                    j++
+                    console.log(timesArray[j])
+                    if (timesArray[j] != undefined) {
+                        document.getElementById("day7").value = timesArray[j].day;
+                        document.getElementById("time7").value = timesArray[j].time;
+                        document.getElementById("location7").value = timesArray[j].location;
                     }
                 }
 
@@ -423,9 +493,9 @@ document.querySelector("#searchButton").addEventListener('click', async () => {
                 document.getElementById("max_participants0").placeholder = currentGroup.max_participants;
                 document.getElementById("start_date0").placeholder = currentGroup.start_date;
                 document.getElementById("end_date0").placeholder = currentGroup.end_date;
-                document.getElementById("day0").placeholder = currentGroup.day;
-                document.getElementById("time0").placeholder = currentGroup.time;
-                document.getElementById("location0").placeholder = currentGroup.location;
+                //document.getElementById("day1").value = currentGroup.day;
+                //document.getElementById("time1").value = currentGroup.time;
+                //document.getElementById("location1").value = currentGroup.location;
                 document.getElementById("description0").placeholder = currentGroup.description;
                 document.getElementById("school0").placeholder = currentGroup.school;
                 document.getElementById("course_number0").placeholder = currentGroup.course_number;
@@ -437,15 +507,58 @@ document.querySelector("#searchButton").addEventListener('click', async () => {
                 console.log(editMeetingTimesBtn)
                 document.querySelector("#sendMeetingTimes0").addEventListener('click', async function (event) {
                     console.log("jana")
-                    let day = document.getElementById('day0').value;
-                    let time = document.getElementById('time0').value;
-                    let location = document.getElementById('location0').value;
-                    times.push({ day, time, location });
+                    let day = document.getElementById('day1').value;
+                    let time = document.getElementById('time1').value;
+                    let location = document.getElementById('location1').value;
+                    if (day != "") {
+                        times.push({ day, time, location });
+                    }
+
+                    day = document.getElementById('day2').value;
+                    time = document.getElementById('time2').value;
+                    location = document.getElementById('location2').value;
+                    if (day != "") {
+                        times.push({ day, time, location });
+                    }
+
+                    day = document.getElementById('day3').value;
+                    time = document.getElementById('time3').value;
+                    location = document.getElementById('location3').value;
+                    if (day != "") {
+                        times.push({ day, time, location });
+                    }
+
+                    day = document.getElementById('day4').value;
+                    time = document.getElementById('time4').value;
+                    location = document.getElementById('location4').value;
+                    if (day != "") {
+                        times.push({ day, time, location });
+                    }
+
+                    day = document.getElementById('day5').value;
+                    time = document.getElementById('time5').value;
+                    location = document.getElementById('location5').value;
+                    if (day != "") {
+                        times.push({ day, time, location });
+                    }
+                    day = document.getElementById('day6').value;
+                    time = document.getElementById('time6').value;
+                    location = document.getElementById('location6').value;
+                    if (day != "") {
+                        times.push({ day, time, location });
+                    }
+                    day = document.getElementById('day7').value;
+                    time = document.getElementById('time7').value;
+                    location = document.getElementById('location7').value;
+                    if (day != "") {
+                        times.push({ day, time, location });
+                    }
                     console.log(times)
                     console.log("TEST")
-                    document.querySelector('#day0').value = "";
-                    document.querySelector('#time0').value = "";
-                    document.querySelector('#location0').value = "";
+                    //document.querySelector('#day0').value = "";
+                    //document.querySelector('#time0').value = "";
+                    //document.querySelector('#location0').value = "";
+                    document.getElementById('meetingTimesModal0').style.display = 'none';
 
                 });
 
@@ -515,7 +628,7 @@ document.querySelector("#searchButton").addEventListener('click', async () => {
                         end_date = undefined;
                     }
 
-                    let dita = document.getElementById("day0").value
+                    let dita = document.getElementById("day1").value
 
                     const editstudyGroupData = {
                         name: name,
