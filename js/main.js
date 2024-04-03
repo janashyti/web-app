@@ -333,9 +333,15 @@ document.querySelector("#searchButton").addEventListener('click', async () => {
                 ownedArray[count] = newArray[i]
                 count++
             }
+        }
+        for(let i = 0; i < array.length; i++){
             let memberArray = array[i].participants
+            if(array[i].is_public == true){
+                if(memberArray.length == 0){
+                    newArray[i].join_option = `<button type = "button" class="joinbtn" id = "${array[i]._id}"> Join </button>` 
+                }
+            }
             for (let j = 0; j < memberArray.length; j++) {
-                console.log(array[i].is_public)
                 let control
                 if (realUserId == JSON.stringify(memberArray[j])) {
                     newArray[i].leave_option = `<button type = "button" class="leavebtn" id = "${array[i]._id}"> Leave </button>`
@@ -351,7 +357,7 @@ document.querySelector("#searchButton").addEventListener('click', async () => {
                 console.log(newArray[i].leave_option)
             }
 
-        }
+        6}
         let finalArray = [];
         let finalTimesArray = []
         console.log(ownedArray)
@@ -489,7 +495,7 @@ document.querySelector("#searchButton").addEventListener('click', async () => {
                             'Content-Type': 'application/json',
                             "Authorization": `Bearer ${token}`
                         },
-                        body: JSON.stringify(user_id._id)
+                        body: JSON.stringify(user._id)
                     })
 
                     if (response.status === 200) {
@@ -518,7 +524,7 @@ document.querySelector("#searchButton").addEventListener('click', async () => {
                             'Content-Type': 'application/json',
                             "Authorization": `Bearer ${token}`
                         },
-                        body: JSON.stringify(user_id._id)
+                        body: JSON.stringify(user._id)
                     })
 
                     if (response.status === 200) {
