@@ -1,6 +1,8 @@
 const token = localStorage.getItem("token");
 console.log("token: " + token)
 const user = localStorage.getItem("user");
+let realUserId
+let user_id
 
 
 document.querySelector("#logoutButton").addEventListener('click', async function (event) {
@@ -320,20 +322,40 @@ document.querySelector("#searchButton").addEventListener('click', async () => {
         let newArray = array;
         let ownedArray = [];
         for (let i = 0; i < array.length; i++) {
-            let user_id = JSON.parse(user)
-            // console.log("user_id: " + user_id)
-            let realUserId = JSON.stringify(user_id._id);
+             user_id = JSON.parse(user)
+            realUserId = JSON.stringify(user_id._id);
 
             newArray[i].view_meetingTimes = `<button type = "button" class="meetingbtn" id = "${array[i]._id}"> View Meeting Times </button>`
             if (JSON.stringify(array[i].owner) === realUserId) {
-                //newArray = array.map(v => ({...v, edit_option: document.innerHTML = "<button id = 'editBtn' >" + "Edit" + "</button>"}))
+                let count = 0
                 newArray[i].edit_option = `<button type = "button" class="editbtn" id = "${array[i]._id}"> Edit </button>`
-                ownedArray[i] = array[i]
+                newArray[i].delete_option = `<button type = "button" class="deletebtn" id = "${array[i]._id}"> Delete </button>`
+                ownedArray[count] = newArray[i]
+                count++
+            }
+            let memberArray = array[i].participants
+            for (let j = 0; j < memberArray.length; j++) {
+                console.log(array[i].is_public)
+                let control
+                if (realUserId == JSON.stringify(memberArray[j])) {
+                    newArray[i].leave_option = `<button type = "button" class="leavebtn" id = "${array[i]._id}"> Leave </button>`
+                    console.log("BIGTEST")
+                    control = true
+                }
+            }
+            for (let j = 0; j < memberArray.length; j++) {
+                if (newArray[i].leave_option == undefined && array[i].is_public == true) {
+                    newArray[i].join_option = `<button type = "button" class="joinbtn" id = "${array[i]._id}"> Join </button>`
+                    console.log("LILTEST")
+                }
+                console.log(newArray[i].leave_option)
             }
 
         }
         let finalArray = [];
         let finalTimesArray = []
+        console.log(ownedArray)
+
 
         if (owned.value == "true") {
             for (let i = 0; i < ownedArray.length; i++) {
@@ -349,24 +371,11 @@ document.querySelector("#searchButton").addEventListener('click', async () => {
         }
         console.log(finalArray)
         console.log(finalTimesArray)
+        console.log(ownedArray)
 
         createTableWithInnerHTML(finalArray);
 
         function createTableWithInnerHTML(finalArray) {
-            console.log(finalArray)
-            for (let i = 0; i < finalArray.length; i++) {
-                let vali = []
-                vali[i] = finalArray[i].meeting_times
-                console.log(vali[i])
-                for (let j = 0; j <= finalArray.length; j++) {
-                    let valo = []
-                    valo = vali[i]
-                    // valo[j] = JSON.stringify(valo[j])
-                    vali[i] = valo
-                    finalArray[i].meeting_times = vali[i]
-                }
-                finalArray[i].meeting_times = vali[i]
-            }
             let tableHTML = '<table border="1"><tr>';
             Object.keys(finalArray[0]).forEach(key => {
                 tableHTML += `<th>${key}</th>`;
@@ -390,24 +399,19 @@ document.querySelector("#searchButton").addEventListener('click', async () => {
         }
 
 
-        console.log(finalArray[0].meeting_times)
-        console.log(finalTimesArray[0].meeting_times)
-        console.log(array[0].meeting_times)
-        console.log(newArray[0].meeting_times)
-        console.log(data[0].meeting_times)
-
-
-
         document.getElementById("searchStudyGroup").style.display = 'none'
 
         let button = document.getElementsByClassName("editbtn")
         let button2 = document.getElementsByClassName("meetingbtn")
+        let button3 = document.getElementsByClassName("deletebtn")
+        let button4 = document.getElementsByClassName("leavebtn")
+        let button5 = document.getElementsByClassName("joinbtn")
+
 
         finalArray.map.call(button2, (b) => {
             b.addEventListener("click", async function (ev) {
                 const sgId2 = ev.currentTarget.id
                 console.log(sgId2)
-                
 
                 for (let i = 0; i < finalArray.length; i++) {
                     let vali = []
@@ -427,8 +431,104 @@ document.querySelector("#searchButton").addEventListener('click', async () => {
                         document.write(finalArray[i].meeting_times)
                     }
                 }
-                //document.write()
+            })
+        })
 
+        finalArray.map.call(button3, (b) => {
+            b.addEventListener("click", async function (ev) {
+                const sgId3 = ev.currentTarget.id
+                let dId
+                let counter
+                for (let i = 0; i < finalArray.length; i++) {
+                    if (sgId3 == finalArray[i]._id) {
+                        dId = finalArray[i]._id
+                        counter = i
+                    }
+                }
+                console.log(sgId3)
+                console.log(dId)
+                const deleteUrl = `https://janas-api-server.azurewebsites.net/studygroup/${dId}`;
+
+                const options = {
+                    method: "DELETE",
+                    headers: {
+                        "Authorization": `Bearer ${token}`
+                    }
+                }
+
+                let response = await fetch(deleteUrl, options)
+
+                console.log(response)
+                console.log(response.status)
+
+                console.log('delete fetch returned')
+
+                if (response.status === 200) {
+                    finalArray.splice(counter, 1)
+                    console.log("deleted successfully")
+                    location.reload()
+                }
+                else if (response.status === 401) {
+                    console.log('failed to delete')
+                }
+
+
+
+            })
+        })
+
+        finalArray.map.call(button4, (b) => {
+            b.addEventListener("click", async function (ev) {
+                const sgId3 = ev.currentTarget.id
+                const leaveUrl = `https://janas-api-server.azurewebsites.net/studygroup/${sgId3}/participants?add_or_remove=remove`;
+                console.log(leaveUrl)
+                try {
+                    let response = await fetch(leaveUrl, {
+                        method: 'PATCH',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            "Authorization": `Bearer ${token}`
+                        },
+                        body: JSON.stringify(user_id._id)
+                    })
+
+                    if (response.status === 200) {
+                        location.reload()
+                    } else {
+                        const errorData = await response.json();
+                    }
+                } catch (error) {
+
+                }
+                
+
+
+            })
+        })
+
+
+        finalArray.map.call(button5, (b) => {
+            b.addEventListener("click", async function (ev) {
+                const sgId3 = ev.currentTarget.id
+                const joinUrl = `https://janas-api-server.azurewebsites.net/studygroup/${sgId3}/participants?add_or_remove=add`;
+                try {
+                    let response = await fetch(joinUrl, {
+                        method: 'PATCH',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            "Authorization": `Bearer ${token}`
+                        },
+                        body: JSON.stringify(user_id._id)
+                    })
+
+                    if (response.status === 200) {
+                        location.reload()
+                    } else {
+                        const errorData = await response.json();
+                    }
+                } catch (error) {
+
+                }
             })
         })
 
@@ -522,9 +622,6 @@ document.querySelector("#searchButton").addEventListener('click', async () => {
                 document.getElementById("max_participants0").placeholder = currentGroup.max_participants;
                 document.getElementById("start_date0").placeholder = currentGroup.start_date;
                 document.getElementById("end_date0").placeholder = currentGroup.end_date;
-                //document.getElementById("day1").value = currentGroup.day;
-                //document.getElementById("time1").value = currentGroup.time;
-                //document.getElementById("location1").value = currentGroup.location;
                 document.getElementById("description0").placeholder = currentGroup.description;
                 document.getElementById("school0").placeholder = currentGroup.school;
                 document.getElementById("course_number0").placeholder = currentGroup.course_number;
@@ -582,11 +679,6 @@ document.querySelector("#searchButton").addEventListener('click', async () => {
                     if (day != "") {
                         times.push({ day, time, location });
                     }
-                    console.log(times)
-                    console.log("TEST")
-                    //document.querySelector('#day0').value = "";
-                    //document.querySelector('#time0').value = "";
-                    //document.querySelector('#location0').value = "";
                     document.getElementById('meetingTimesModal0').style.display = 'none';
 
                 });
