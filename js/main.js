@@ -326,6 +326,8 @@ document.querySelector("#searchButton").addEventListener('click', async () => {
             realUserId = JSON.stringify(user_id._id);
 
             newArray[i].view_meetingTimes = `<button type = "button" class="meetingbtn" id = "${array[i]._id}"> View Meeting Times </button>`
+            newArray[i].participants_info = `<button type = "button" class="infobtn" id = "${array[i]._id}"> View Participants Info </button>`
+            
             if (JSON.stringify(array[i].owner) === realUserId) {
                 let count = 0
                 newArray[i].edit_option = `<button type = "button" class="editbtn" id = "${array[i]._id}"> Edit </button>`
@@ -357,7 +359,7 @@ document.querySelector("#searchButton").addEventListener('click', async () => {
                 console.log(newArray[i].leave_option)
             }
 
-        6}
+        }
         let finalArray = [];
         let finalTimesArray = []
         console.log(ownedArray)
@@ -412,6 +414,7 @@ document.querySelector("#searchButton").addEventListener('click', async () => {
         let button3 = document.getElementsByClassName("deletebtn")
         let button4 = document.getElementsByClassName("leavebtn")
         let button5 = document.getElementsByClassName("joinbtn")
+        let button6 = document.getElementsByClassName("infobtn")
 
 
         finalArray.map.call(button2, (b) => {
@@ -506,9 +509,6 @@ document.querySelector("#searchButton").addEventListener('click', async () => {
                 } catch (error) {
 
                 }
-                
-
-
             })
         })
 
@@ -537,6 +537,39 @@ document.querySelector("#searchButton").addEventListener('click', async () => {
                 }
             })
         })
+
+    
+
+
+    finalArray.map.call(button6, (b) => {
+        b.addEventListener("click", async function (ev) {
+            const sgId3 = ev.currentTarget.id
+            const Url = `https://janas-api-server.azurewebsites.net/user/${sgId3}`;
+            try {
+                let response = await fetch(Url, {
+                    method: 'GET',
+                    headers: {
+                        "Authorization": `Bearer ${token}`
+                    },
+                })
+
+                if (response.status === 200) {
+                    let data = []
+                    data = await response.json()
+                    for(let i = 0; i < data.length; i++){
+                        delete data[i]._id
+                        delete data[i].notifications
+                    }
+                    console.log(data[0]._id)
+                    createTableWithInnerHTML(data)
+                } else {
+                    const errorData = await response.json();
+                }
+            } catch (error) {
+
+            }
+        })
+    })
 
         finalArray.map.call(button, (b) => {
             b.addEventListener("click", async function (ev) {
