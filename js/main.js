@@ -328,14 +328,17 @@ document.querySelector("#searchButton").addEventListener('click', async () => {
             newArray[i].view_meetingTimes = `<button type = "button" class="meetingbtn" id = "${array[i]._id}"> View Meeting Times </button>`
             if ((newArray[i].is_public == true) || (JSON.stringify(array[i].owner) == realUserId)) {
                 newArray[i].participants_info = `<button type = "button" class="infobtn" id = "${array[i]._id}"> View Participants Info </button>`
+                newArray[i].owner_info = `<button type = "button" class="ownerbtn" id = "${array[i]._id}"> View Owner's Info </button>`
+
             }
             let members = array[i].participants
             console.log(members)
-            for(let j = 0; j < members.length; j++){
+            for (let j = 0; j < members.length; j++) {
                 console.log(members[j])
-                if(realUserId == JSON.stringify(members[j])){
+                if (realUserId == JSON.stringify(members[j])) {
                     console.log("TESTEST")
-                    newArray[i].participants_info = `<button type = "button" class="infobtn" id = "${array[i]._id}"> View Participants Info </button>` 
+                    newArray[i].participants_info = `<button type = "button" class="infobtn" id = "${array[i]._id}"> View Participants Info </button>`
+                    newArray[i].owner_info = `<button type = "button" class="ownerbtn" id = "${array[i]._id}"> View Owner's Info </button>`
                 }
             }
 
@@ -425,6 +428,7 @@ document.querySelector("#searchButton").addEventListener('click', async () => {
         let button4 = document.getElementsByClassName("leavebtn")
         let button5 = document.getElementsByClassName("joinbtn")
         let button6 = document.getElementsByClassName("infobtn")
+        let button7 = document.getElementsByClassName("ownerbtn")
 
 
         finalArray.map.call(button2, (b) => {
@@ -555,22 +559,28 @@ document.querySelector("#searchButton").addEventListener('click', async () => {
             b.addEventListener("click", async function (ev) {
                 const sgId3 = ev.currentTarget.id
                 const Url = `https://janas-api-server.azurewebsites.net/user/${sgId3}`;
+                let oID
+                for (let i = 0; i < array.length; i++) {
+                    if (array[i]._id == sgId3) {
+                        oID = array[i].owner
+                    }
+                }
+                console.log("oID: " + oID)
                 try {
                     let response = await fetch(Url, {
                         method: 'GET',
                         headers: {
                             "Authorization": `Bearer ${token}`
-                        },
+                        }
                     })
 
                     if (response.status === 200) {
                         let data = []
                         data = await response.json()
-                        for (let i = 0; i < data.length; i++) {
+                        for (let i = 1; i < data.length; i++) {
                             delete data[i]._id
                             delete data[i].notifications
                         }
-                        console.log(data[0]._id)
                         createTableWithInnerHTML(data)
                     } else {
                         const errorData = await response.json();
@@ -580,6 +590,46 @@ document.querySelector("#searchButton").addEventListener('click', async () => {
                 }
             })
         })
+
+        finalArray.map.call(button7, (b) => {
+            b.addEventListener("click", async function (ev) {
+                const sgId3 = ev.currentTarget.id
+                let oID
+                for (let i = 0; i < array.length; i++) {
+                    if (array[i]._id == sgId3) {
+                        oID = array[i].owner
+                    }
+                }
+                console.log("oID: " + oID)
+                const Url = `https://janas-api-server.azurewebsites.net/user/owner/${oID}`;
+               
+                try {
+                    let response = await fetch(Url, {
+                        method: 'GET',
+                        headers: {
+                            "Authorization": `Bearer ${token}`
+                        }
+                    })
+
+                    if (response.status === 200) {
+                        let data = []
+                        data[0] = await response.json()
+                        console.log("DATA: " + data[0])
+                        for (let i = 0; i < data.length; i++) {
+                            delete data[i]._id
+                            delete data[i].notifications
+                        }
+                        createTableWithInnerHTML(data)
+                    } else {
+                        const errorData = await response.json();
+                    }
+                } catch (error) {
+
+                }
+            })
+        })
+
+
 
         finalArray.map.call(button, (b) => {
             b.addEventListener("click", async function (ev) {
