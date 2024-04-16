@@ -11,7 +11,9 @@
   <div id="main">
     <button type="button" class="signupbtn" id="logoutButton" style="width:fit-content">Log out</button>
     <br><br><br><br>
-    <div id = "editmsg">
+    <button type="button" class="signupbtn" id="myNotificationsButton" style="width:fit-content">My Notifications</button>
+    <br><br><br><br>
+    <div id="editmsg">
     </div>
 
     <button onclick="document.getElementById('createStudyGroupModule').style.display='block'" style="width:auto;">Create
@@ -142,7 +144,7 @@
         <h1>Edit Study Group</h1>
         <hr>
         <label for="name"><b>Study Group Name</b></label>
-        <input type="text"  name="name" id="name0">
+        <input type="text" name="name" id="name0">
 
         <label for="is_public"><b>Public/Private</b></label>
         <input type="boolean" placeholder="Enter true/false for new public prefernce" name="is_public" id="is_public0">
@@ -263,8 +265,66 @@
 
 
 
+  <div id="sendNotificationModal" class="modal">
+    <span onclick="document.getElementById('sendNotificationModal').style.display='none'" class="close"
+      title="Close Modal">&times;</span>
+    <form method="post" class="modal-content" id="sendNotificationData">
+      <div class="container">
+        <h1>Create Notification</h1>
+        <hr>
+        <label for="subject"><b>Subject</b></label>
+        <input type="text" placeholder="Enter Subject" name="subject" id="subject">
+
+        <label for="bodyc"><b>Body</b></label>
+        <input type="text" placeholder="Enter Body" name="body" id="body">
+
+        <label for="notification_type"><b>Notification Type</b></label>
+        <input type="text" placeholder="Enter Notification Type" name="notification_type" id="notification_type">
+
+        <div class="clearfix">
+          <button type="button" onclick="document.getElementById('sendNotificationModal').style.display='none'"
+            class="cancelbtn">Cancel</button>
+          <button type="button" class="signupbtn" id="sendNotificationbtn">Send notification</button>
+        </div>
+      </div>
+    </form>
+  </div>
+
+
+  <div id="sendNotificationModal2" class="modal">
+    <span onclick="document.getElementById('sendNotificationModal2').style.display='none'" class="close"
+      title="Close Modal">&times;</span>
+    <form method="post" class="modal-content" id="sendNotificationData2">
+      <div class="container">
+        <h1>Create Notification</h1>
+        <hr>
+        <label for="subject"><b>Subject</b></label>
+        <input type="text" placeholder="Enter Subject" name="subject" id="subject2">
+
+        <label for="bodyc"><b>Body</b></label>
+        <input type="text" placeholder="Enter Body" name="body" id="body2">
+
+        <label for="notification_type"><b>Notification Type</b></label>
+        <input type="text" placeholder="Enter Notification Type" name="notification_type" id="notification_type2">
+
+        <div class="clearfix">
+          <button type="button" onclick="document.getElementById('sendNotificationModal2').style.display='none'"
+            class="cancelbtn">Cancel</button>
+          <button type="button" class="signupbtn" id="sendNotificationbtn2">Send notification</button>
+        </div>
+      </div>
+    </form>
+  </div>
+
+
+
   <div id="searchPrint">
   </div>
+
+  <div id="notifications">
+  </div>
+
+
 
 
 

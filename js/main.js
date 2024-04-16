@@ -5,6 +5,30 @@ let realUserId
 let user_id
 
 
+        function createTable(finalArray) {
+            let tableHTML = '<table border="1"><tr>';
+            Object.keys(finalArray[0]).forEach(key => {
+                tableHTML += `<th>${key}</th>`;
+            });
+
+            tableHTML += '</tr>';
+
+            finalArray.forEach(item => {
+                tableHTML += '<tr>';
+                Object.values(item).forEach(value => {
+
+                    tableHTML += `<td>${value}</td>`;
+
+                });
+                tableHTML += '</tr>';
+            });
+            tableHTML += '</table>';
+            let space = document.querySelector("#notifications")
+            space.innerHTML = tableHTML;
+            
+        }
+
+
 document.querySelector("#logoutButton").addEventListener('click', async function (event) {
 
     console.log("logout")
@@ -42,7 +66,52 @@ document.querySelector("#logoutButton").addEventListener('click', async function
 
 })
 
+document.querySelector("#myNotificationsButton").addEventListener('click', async function (event) {
 
+    console.log("MyNOTIFICATIONS")
+    const token = localStorage.getItem("token");
+    console.log(token)
+    let currentUser = JSON.parse(user)
+    let id = currentUser._id
+    console.log(id)
+    
+
+    const url = `https://janas-api-server.azurewebsites.net/notification/${id}`
+    console.log(url)
+
+
+
+    const options = {
+        method: "GET",
+        headers: {
+            "Authorization": `Bearer ${token}`
+        }
+    }
+
+
+    let response = await fetch(url, options)
+
+    let data = []
+    data = await response.json()
+
+    for(let i = 0; i < data.length; i++){
+        delete data[i]._id
+        delete data[i].sender
+        delete data[i].receiver
+        delete data[i].is_read
+    }
+    
+
+    console.log(data)
+    console.log(response.status)
+
+    if (response.status === 200) {
+        createTable(data)
+    }
+    else if (response.status === 401) {
+    }
+
+})
 
 const message = document.querySelector("p");
 
@@ -565,7 +634,6 @@ document.querySelector("#searchButton").addEventListener('click', async () => {
                         oID = array[i].owner
                     }
                 }
-                console.log("oID: " + oID)
                 try {
                     let response = await fetch(Url, {
                         method: 'GET',
@@ -577,11 +645,85 @@ document.querySelector("#searchButton").addEventListener('click', async () => {
                     if (response.status === 200) {
                         let data = []
                         data = await response.json()
-                        for (let i = 1; i < data.length; i++) {
-                            delete data[i]._id
-                            delete data[i].notifications
+                        for (let i = 0; i < data.length; i++) {
+                            data[i].notifications_msg = `<button type = "button" class="notificationbtn" id = "${data[i]._id}"> Notify </button>`
                         }
                         createTableWithInnerHTML(data)
+
+                        let button8 = document.getElementsByClassName("notificationbtn")
+
+                        data.map.call(button8, (b) => {
+                            b.addEventListener("click", async function (ev) {
+
+                                let receiver = ev.currentTarget.id
+                                console.log(receiver)
+
+                                let sender = user_id._id
+                                const url = "https://janas-api-server.azurewebsites.net/notification"
+
+                                const notificationModal = document.getElementById('sendNotificationModal2')
+                                notificationModal.style.display = 'block';
+
+
+                                document.querySelector('#sendNotificationbtn2').addEventListener("click", async function (ev) {
+
+                                    let subject = document.getElementById("subject2").value
+                                    console.log(subject)
+                                    let body = document.getElementById("body2").value
+                                    let notification_type = document.getElementById("notification_type2").value
+
+
+                                    let notificationData = {
+                                        sender: sender,
+                                        receiver: receiver,
+                                        subject: subject,
+                                        body: body,
+                                        is_read: false,
+                                        notification_type: notification_type
+                                    }
+                                    console.log(notificationData)
+                                    try {
+                                        const response = await fetch(url, {
+                                            method: "POST",
+                                            headers: {
+                                                "Authorization": `Bearer ${token}`,
+                                                "Content-Type": "application/json"
+                                            },
+                                            body: JSON.stringify(notificationData)
+                                        });
+                                        console.log("test4")
+                                        if (response.ok) {
+                                            console.log('test5')
+                                            location.reload()
+                                            try {
+                                                const data = await response.json();
+                                                console.log(data)
+                                                mssg.innerHTML = data.message;
+                                                message.textContent = 'Thank you! Your study Group has been created!'
+                                                message.style.color = 'green';
+                                                location.reload()
+                                            }
+                                            catch (error) {
+                                                //  console.error('Error parsing JSON response:', error.message);
+                                                // Ignore error parsing JSON
+                                                mssg.style.color = 'green';
+                                                location.href = "main.html";
+                                            }
+                                        } else {
+                                            const errorData = await response.json();
+                                            mssg.innerHTML = "Error: " + errorData.message;
+                                            mssg.style.color = 'red';
+                                        }
+                                    } catch (error) {
+
+                                    }
+
+                                })
+
+
+                            })
+                        })
+
                     } else {
                         const errorData = await response.json();
                     }
@@ -602,7 +744,7 @@ document.querySelector("#searchButton").addEventListener('click', async () => {
                 }
                 console.log("oID: " + oID)
                 const Url = `https://janas-api-server.azurewebsites.net/user/owner/${oID}`;
-               
+
                 try {
                     let response = await fetch(Url, {
                         method: 'GET',
@@ -614,12 +756,80 @@ document.querySelector("#searchButton").addEventListener('click', async () => {
                     if (response.status === 200) {
                         let data = []
                         data[0] = await response.json()
-                        console.log("DATA: " + data[0])
                         for (let i = 0; i < data.length; i++) {
-                            delete data[i]._id
-                            delete data[i].notifications
+                            data[i].notifications_msg = `<button type = "button" class="notificationbtn" id = "${array[i]._id}"> Notify </button>`
                         }
                         createTableWithInnerHTML(data)
+                        let button8 = document.getElementsByClassName("notificationbtn")
+
+                        data.map.call(button8, (b) => {
+                            b.addEventListener("click", async function (ev) {
+                                let receiver = data[0]._id
+                                let sender = user_id._id
+                                const url = "https://janas-api-server.azurewebsites.net/notification"
+
+                                const notificationModal = document.getElementById('sendNotificationModal')
+                                notificationModal.style.display = 'block';
+
+
+                                document.querySelector('#sendNotificationbtn').addEventListener("click", async function (ev) {
+
+                                    let subject = document.getElementById("subject").value
+                                    console.log(subject)
+                                    let body = document.getElementById("body").value
+                                    let notification_type = document.getElementById("notification_type").value
+
+
+                                    let notificationData = {
+                                        sender: sender,
+                                        receiver: receiver,
+                                        subject: subject,
+                                        body: body,
+                                        is_read: false,
+                                        notification_type: notification_type
+                                    }
+                                    console.log(notificationData)
+                                    try {
+                                        const response = await fetch(url, {
+                                            method: "POST",
+                                            headers: {
+                                                "Authorization": `Bearer ${token}`,
+                                                "Content-Type": "application/json"
+                                            },
+                                            body: JSON.stringify(notificationData)
+                                        });
+                                        console.log("test4")
+                                        if (response.ok) {
+                                            console.log('test5')
+                                            location.reload()
+                                            try {
+                                                const data = await response.json();
+                                                console.log(data)
+                                                mssg.innerHTML = data.message;
+                                                message.textContent = 'Thank you! Your study Group has been created!'
+                                                message.style.color = 'green';
+                                                location.reload()
+                                            } catch (error) {
+                                                //  console.error('Error parsing JSON response:', error.message);
+                                                // Ignore error parsing JSON
+                                                mssg.style.color = 'green';
+                                                location.href = "main.html";
+                                            }
+                                        } else {
+                                            const errorData = await response.json();
+                                            mssg.innerHTML = "Error: " + errorData.message;
+                                            mssg.style.color = 'red';
+                                        }
+                                    } catch (error) {
+
+                                    }
+                                })
+
+
+                            })
+                        })
+
+
                     } else {
                         const errorData = await response.json();
                     }
@@ -636,10 +846,7 @@ document.querySelector("#searchButton").addEventListener('click', async () => {
                 console.log("clicked")
 
                 const editModal = document.getElementById('editStudyGroupModule')
-                console.log(editModal)
                 editModal.style.display = 'block';
-
-
 
                 const sgId = ev.currentTarget.id
 

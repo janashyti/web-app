@@ -34,7 +34,12 @@ input[type=text], input[type=boolean], input[type=integer], input[type=email] {
   }
 
   #logoutButton{
-    text-align: right;
+    text-align: center;
+  }
+
+  #notifications{
+    text-align: center;
+    margin-right: 200px;
   }
   
   /* Extra styles for the cancel button */
