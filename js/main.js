@@ -5,28 +5,28 @@ let realUserId
 let user_id
 
 
-        function createTable(finalArray) {
-            let tableHTML = '<table border="1"><tr>';
-            Object.keys(finalArray[0]).forEach(key => {
-                tableHTML += `<th>${key}</th>`;
-            });
+function createTable(finalArray) {
+    let tableHTML = '<table border="1"><tr>';
+    Object.keys(finalArray[0]).forEach(key => {
+        tableHTML += `<th>${key}</th>`;
+    });
 
-            tableHTML += '</tr>';
+    tableHTML += '</tr>';
 
-            finalArray.forEach(item => {
-                tableHTML += '<tr>';
-                Object.values(item).forEach(value => {
+    finalArray.forEach(item => {
+        tableHTML += '<tr>';
+        Object.values(item).forEach(value => {
 
-                    tableHTML += `<td>${value}</td>`;
+            tableHTML += `<td>${value}</td>`;
 
-                });
-                tableHTML += '</tr>';
-            });
-            tableHTML += '</table>';
-            let space = document.querySelector("#notifications")
-            space.innerHTML = tableHTML;
-            
-        }
+        });
+        tableHTML += '</tr>';
+    });
+    tableHTML += '</table>';
+    let space = document.querySelector("#notifications")
+    space.innerHTML = tableHTML;
+
+}
 
 
 document.querySelector("#logoutButton").addEventListener('click', async function (event) {
@@ -74,7 +74,7 @@ document.querySelector("#myNotificationsButton").addEventListener('click', async
     let currentUser = JSON.parse(user)
     let id = currentUser._id
     console.log(id)
-    
+
 
     const url = `https://janas-api-server.azurewebsites.net/notification/${id}`
     console.log(url)
@@ -94,13 +94,13 @@ document.querySelector("#myNotificationsButton").addEventListener('click', async
     let data = []
     data = await response.json()
 
-    for(let i = 0; i < data.length; i++){
+    for (let i = 0; i < data.length; i++) {
         delete data[i]._id
         delete data[i].sender
         delete data[i].receiver
         delete data[i].is_read
     }
-    
+
 
     console.log(data)
     console.log(response.status)
@@ -121,9 +121,6 @@ var modal = document.getElementById('meetingTimesModal');
 
 console.log('loading')
 
-//function closeMe() {
-//  document.querySelector('#meetingTimesModal').style.display = "none";
-//}
 
 let times = [];
 console.log("oni: " + times);
@@ -143,7 +140,6 @@ document.querySelector("#sendMeetingTimes").addEventListener('click', async func
 
 
 document.querySelector("#createStudyGroupButton").addEventListener('click', async function (event) {
-    //event.preventDefault();
     console.log('test1')
 
     const name = document.getElementById('name').value;
@@ -167,9 +163,6 @@ document.querySelector("#createStudyGroupButton").addEventListener('click', asyn
     if (end_date == false) {
         end_date = undefined;
     }
-
-    //const isTrue = (time) ? true : false
-    //console.log(`***${time}*** isTrue: ${isTrue}`) 
 
 
 
@@ -224,23 +217,108 @@ async function createStudyGroup(studyGroupData) {
             },
             body: JSON.stringify(studyGroupData)
         });
-        console.log("test4")
         if (response.ok) {
-            console.log('test5')
-            try {
-                const data = await response.json();
-                console.log(data)
-                mssg.innerHTML = data.message;
-                message.textContent = 'Thank you! Your study Group has been created!'
-                message.style.color = 'green';
-                location.href = "main.html";
-            } catch (error) {
-                //  console.error('Error parsing JSON response:', error.message);
-                // Ignore error parsing JSON
-                mssg.style.color = 'green';
-                location.href = "main.html";
+            let fillInInsta = document.getElementById("askForInstabtn")
+            console.log(JSON.parse(user))
+            if ((JSON.parse(user).ig_username == undefined) || (JSON.parse(user).ig_password == undefined)) {
+                document.getElementById("askForInstaModal").style.display = "block"
+                document.getElementById("noConsent").addEventListener('click', async function (event) {
+                    location.reload()
+                })
+                fillInInsta.addEventListener('click', async function (event) {
+                    document.getElementById("instaCredentialsModal").style.display = "block"
+                    document.getElementById("sendinstaCredentialsbtn").addEventListener('click', async function (event) {
+                        let instaUsername = document.getElementById("instaUsername").value
+                        let instaPassword = document.getElementById("instaPassword").value
+                        console.log(instaUsername)
+                        console.log(instaPassword)
+                        const credentialsURL = "https://janas-api-server.azurewebsites.net/user/insta"
+                        let instaCredentialsData = {
+                            ig_username: instaUsername,
+                            ig_password: instaPassword
+                        }
+                        try {
+                            const response = await fetch(credentialsURL, {
+                                method: "PATCH",
+                                headers: {
+                                    "Authorization": `Bearer ${token}`,
+                                    "Content-Type": "application/json"
+                                },
+                                body: JSON.stringify(instaCredentialsData)
+                            });
+                            if (response.ok) {
+                                console.log("Insta Credentials Saved!")
+                                document.getElementById("instaConsentModal").style.display = "block"
+                                document.getElementById("noPostConsent").addEventListener('click', async function (event) {
+                                    location.reload()
+                                })
+
+                                document.getElementById("postToInstabtn").addEventListener('click', async function (event) {
+                                    let postURL = "https://janas-api-server.azurewebsites.net/user/insta-post"
+                                    let caption = "I created a Study Group"
+                                    let imgURL = "https://as1.ftcdn.net/v2/jpg/03/56/73/14/1000_F_356731435_KWwMysbXYKSHjQAIkja9PlvJBzd0Y4Xi.jpg"
+                                    let instaPostData = {
+                                        caption: caption,
+                                        image_url: imgURL
+                                    }
+                                    try {
+                                        const response = await fetch(postURL, {
+                                            method: "POST",
+                                            headers: {
+                                                "Authorization": `Bearer ${token}`,
+                                                "Content-Type": "application/json"
+                                            },
+                                            body: JSON.stringify(instaPostData)
+                                        });
+                                        if (response.ok) {
+                                            console.log("posted to insta")
+                                            location.reload()
+                                        }
+                                    } catch (e) {
+                                        console.log(e)
+                                    }
+                                })
+                            }
+                        }
+                        catch (error) {
+                            console.log(error)
+                        }
+                    })
+                })
             }
-        } else {
+            else if ((JSON.parse(user).ig_username != undefined) && (JSON.parse(user).ig_password != undefined)) {
+                document.getElementById("instaConsentModal").style.display = "block"
+                document.getElementById("noPostConsent").addEventListener('click', async function (event) {
+                    location.reload()
+                })
+                document.getElementById("postToInstabtn").addEventListener('click', async function (event) {
+                    let postURL0 = "https://janas-api-server.azurewebsites.net/user/insta-post"
+                    let caption0 = "I created a Study Group"
+                    let imgURL0 = "https://as1.ftcdn.net/v2/jpg/03/56/73/14/1000_F_356731435_KWwMysbXYKSHjQAIkja9PlvJBzd0Y4Xi.jpg"
+                    let instaPostData0 = {
+                        caption: caption0,
+                        image_url: imgURL0
+                    }
+                    try {
+                        const response = await fetch(postURL0, {
+                            method: "POST",
+                            headers: {
+                                "Authorization": `Bearer ${token}`,
+                                "Content-Type": "application/json"
+                            },
+                            body: JSON.stringify(instaPostData0)
+                        });
+                        if (response.ok) {
+                            console.log("posted to insta")
+                            location.reload()
+                        }
+                    } catch (e) {
+                        console.log(e)
+                    }
+                })
+            }
+        }
+        else {
             const errorData = await response.json();
             mssg.innerHTML = "Error: " + errorData.message;
             mssg.style.color = 'red';
@@ -367,9 +445,6 @@ document.querySelector("#searchButton").addEventListener('click', async () => {
         }
     }
 
-
-
-    console.log("test2")
 
     const options = {
         method: "GET",
@@ -611,7 +686,114 @@ document.querySelector("#searchButton").addEventListener('click', async () => {
                     })
 
                     if (response.status === 200) {
-                        location.reload()
+
+                        let fillInInsta = document.getElementById("askForInstabtn2")
+                        console.log(JSON.parse(user))
+                        if ((JSON.parse(user).ig_username == undefined)  || (JSON.parse(user).ig_password == undefined)) {
+                            document.getElementById("askForInstaModal2").style.display = "block"
+                            document.getElementById("noConsent2").addEventListener('click', async function (event) {
+                                location.reload()
+                            })
+                            fillInInsta.addEventListener('click', async function (event) {
+                                document.getElementById("instaCredentialsModal2").style.display = "block"
+                                document.getElementById("sendinstaCredentialsbtn2").addEventListener('click', async function (event) {
+                                    let instaUsername = document.getElementById("instaUsername2").value
+                                    let instaPassword = document.getElementById("instaPassword2").value
+                                    console.log(instaUsername)
+                                    console.log(instaPassword)
+                                    const credentialsURL = "https://janas-api-server.azurewebsites.net/user/insta"
+                                    let instaCredentialsData = {
+                                        ig_username: instaUsername,
+                                        ig_password: instaPassword
+                                    }
+                                    try {
+                                        const response = await fetch(credentialsURL, {
+                                            method: "PATCH",
+                                            headers: {
+                                                "Authorization": `Bearer ${token}`,
+                                                "Content-Type": "application/json"
+                                            },
+                                            body: JSON.stringify(instaCredentialsData)
+                                        });
+                                        if (response.ok) {
+                                            console.log("Insta Credentials Saved!")
+                                            document.getElementById("instaConsentModal2").style.display = "block"
+                                            document.getElementById("noPostConsent2").addEventListener('click', async function (event) {
+                                                location.reload()
+                                            })
+
+                                            document.getElementById("postToInstabtn2").addEventListener('click', async function (event) {
+                                                let postURL = "https://janas-api-server.azurewebsites.net/user/insta-post"
+                                                let caption = "I joined a Study Group"
+                                                let imgURL = "https://as1.ftcdn.net/v2/jpg/06/00/64/94/1000_F_600649402_3kaW5X3iYG8eW34pJXinBfmKQqj51M4k.jpg"
+                                                let instaPostData = {
+                                                    caption: caption,
+                                                    image_url: imgURL
+                                                }
+                                                try {
+                                                    const response = await fetch(postURL, {
+                                                        method: "POST",
+                                                        headers: {
+                                                            "Authorization": `Bearer ${token}`,
+                                                            "Content-Type": "application/json"
+                                                        },
+                                                        body: JSON.stringify(instaPostData)
+                                                    });
+                                                    if (response.ok) {
+                                                        console.log("posted to insta")
+                                                        location.reload()
+                                                    }
+                                                } catch (e) {
+                                                    console.log(e)
+                                                }
+                                            })
+                                        }
+                                    }
+                                    catch (error) {
+                                        console.log(error)
+                                    }
+                                })
+                            })
+                        }
+                        else if ((JSON.parse(user).ig_username != undefined) && (JSON.parse(user).ig_password != undefined)) {
+                            document.getElementById("instaConsentModal2").style.display = "block"
+                            document.getElementById("noPostConsent2").addEventListener('click', async function (event) {
+                                location.reload()
+                            })
+                            document.getElementById("postToInstabtn2").addEventListener('click', async function (event) {
+                                let postURL1 = "https://janas-api-server.azurewebsites.net/user/insta-post"
+                                let caption1 = "I joined a Study Group"
+                                let imgURL1 = "https://as1.ftcdn.net/v2/jpg/06/00/64/94/1000_F_600649402_3kaW5X3iYG8eW34pJXinBfmKQqj51M4k.jpg"
+                                let instaPostData1 = {
+                                    caption: caption1,
+                                    image_url: imgURL1
+                                }
+                                try {
+                                    const response = await fetch(postURL1, {
+                                        method: "POST",
+                                        headers: {
+                                            "Authorization": `Bearer ${token}`,
+                                            "Content-Type": "application/json"
+                                        },
+                                        body: JSON.stringify(instaPostData1)
+                                    });
+                                    if (response.ok) {
+                                        console.log("posted to insta")
+                                        location.reload()
+                                    }
+                                } catch (e) {
+                                    console.log(e)
+                                }
+                            })
+                        }
+                        try {
+                            const data = await response.json();
+                            console.log(data)
+                        }
+                        catch (error) {
+                            console.log(error)
+                        }
+
                     } else {
                         const errorData = await response.json();
                     }
@@ -1130,12 +1312,9 @@ document.querySelector("#searchButton").addEventListener('click', async () => {
                     }
 
                 });
-
-
             });
         })
     }
-
     else {
         h1.innerHTML = "Something went wrong."
         p.innerHTML = "Please try again!"

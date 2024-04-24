@@ -318,15 +318,135 @@
 
 
 
+
+
+  <div id="askForInstaModal" class="modal">
+    <span onclick="document.getElementById('askForInstaModal').style.display='none'" class="close"
+      title="Close Modal">&times;</span>
+    <form method="post" class="modal-content" id="askForInstaData">
+      <div class="container">
+        <h1>Would you like to fill in your Instagram Credentials</h1>
+        <hr>
+        <div class="clearfix">
+          <button type="button" onclick="document.getElementById('askForInstaModal').style.display='none'"
+            class="cancelbtn" id = "noConsent">No</button>
+          <button type="button" class="signupbtn" id="askForInstabtn">Yes</button>
+        </div>
+      </div>
+    </form>
+  </div>
+
+
+  <div id="instaCredentialsModal" class="modal">
+    <span onclick="document.getElementById('instaCredentialsModal').style.display='none'" class="close"
+      title="Close Modal">&times;</span>
+    <form method="post" class="modal-content" id="instaCredentialsData">
+      <div class="container">
+        <h1>Fill in your Instagram Information</h1>
+        <hr>
+        <label for="instaUsername"><b>Username</b></label>
+        <input type="text" placeholder="Enter Your Instagram Username" name="instaUsername" id="instaUsername">
+
+        <label for="instaPassword"><b>Password</b></label>
+        <input type="password" placeholder="Enter Your Instagram Password" name="instaPassword" id="instaPassword">
+
+        <div class="clearfix">
+          <button type="button" onclick="document.getElementById('instaCredentialsModal').style.display='none'"
+            class="cancelbtn">Cancel</button>
+          <button type="button" class="signupbtn" id="sendinstaCredentialsbtn">Send Credentials</button>
+        </div>
+      </div>
+    </form>
+  </div>
+
+
+  <div id="instaConsentModal" class="modal">
+    <span onclick="document.getElementById('instaConsentModal').style.display='none'" class="close"
+      title="Close Modal">&times;</span>
+    <form method="post" class="modal-content" id="instaConsentData">
+      <div class="container">
+        <h1>Would you like to share on Instagram</h1>
+        <hr>
+        <div class="clearfix">
+          <button type="button" onclick="document.getElementById('instaConsentModal').style.display='none'"
+            class="cancelbtn" id = "noPostConsent">No</button>
+          <button type="button" class="signupbtn" id="postToInstabtn">Yes</button>
+        </div>
+      </div>
+    </form>
+  </div>
+
+
+
+
+
+
+
+
+  <div id="askForInstaModal2" class="modal">
+    <span onclick="document.getElementById('askForInstaModal2').style.display='none'" class="close"
+      title="Close Modal">&times;</span>
+    <form method="post" class="modal-content" id="askForInstaData2">
+      <div class="container">
+        <h1>Would you like to fill in your Instagram Credentials</h1>
+        <hr>
+        <div class="clearfix">
+          <button type="button" onclick="document.getElementById('askForInstaModal2').style.display='none'"
+            class="cancelbtn" id = "noConsent2">No</button>
+          <button type="button" class="signupbtn" id="askForInstabtn2">Yes</button>
+        </div>
+      </div>
+    </form>
+  </div>
+
+
+  <div id="instaCredentialsModal2" class="modal">
+    <span onclick="document.getElementById('instaCredentialsModal2').style.display='none'" class="close"
+      title="Close Modal">&times;</span>
+    <form method="post" class="modal-content" id="instaCredentialsData2">
+      <div class="container">
+        <h1>Fill in your Instagram Information</h1>
+        <hr>
+        <label for="instaUsername"><b>Username</b></label>
+        <input type="text" placeholder="Enter Your Instagram Username" name="instaUsername" id="instaUsername2">
+
+        <label for="instaPassword"><b>Password</b></label>
+        <input type="password" placeholder="Enter Your Instagram Password" name="instaPassword" id="instaPassword2">
+
+        <div class="clearfix">
+          <button type="button" onclick="document.getElementById('instaCredentialsModal2').style.display='none'"
+            class="cancelbtn">Cancel</button>
+          <button type="button" class="signupbtn" id="sendinstaCredentialsbtn2">Send Credentials</button>
+        </div>
+      </div>
+    </form>
+  </div>
+
+
+  <div id="instaConsentModal2" class="modal">
+    <span onclick="document.getElementById('instaConsentModal2').style.display='none'" class="close"
+      title="Close Modal">&times;</span>
+    <form method="post" class="modal-content" id="instaConsentData2">
+      <div class="container">
+        <h1>Would you like to share on Instagram</h1>
+        <hr>
+        <div class="clearfix">
+          <button type="button" onclick="document.getElementById('instaConsentModal2').style.display='none'"
+            class="cancelbtn" id = "noPostConsent2">No</button>
+          <button type="button" class="signupbtn" id="postToInstabtn2">Yes</button>
+        </div>
+      </div>
+    </form>
+  </div>
+
+
+
+
   <div id="searchPrint">
   </div>
 
   <div id="notifications">
   </div>
-
-
-
-
 
   <script type="module" src="js/main.js"></script>
 </body>
